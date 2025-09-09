@@ -2,22 +2,26 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 type CategoryCardProps = {
     title: string;
-    imagaes: any;
+    images: any;
     onPress?: () => void;
-}
-export default function CategoriesCard({ title, imagaes, onPress }: CategoryCardProps) {
+};
+
+export default function CategoriesCard({ title, images, onPress }: CategoryCardProps) {
     return (
         <TouchableOpacity
             onPress={onPress}
-            activeOpacity={0.8}
-            className="w-[48%] bg-white rounded-2xl overflow-hidden mb-4"
+            activeOpacity={0.9}
+            className="w-[48%] bg-cyan-800 rounded-2xl mb-4 shadow-md"
         >
-            <Image source={imagaes} className="w-full h-32" resizeMode="cover" />
-            <View className="absolute bottom-2 left-2">
-                <Text className="text-white font-bold text-base">{title}</Text>
+            {/* Ảnh */}
+            <View className="w-full h-20 rounded-t-2xl overflow-hidden bg-gray-100">
+                <Image source={images} className="w-full h-full" resizeMode="cover" />
             </View>
 
-
+            {/* Text */}
+            <View className="p-3">
+                <Text className="text-black font-bold text-sm">{title}</Text>
+            </View>
         </TouchableOpacity>
     );
 }

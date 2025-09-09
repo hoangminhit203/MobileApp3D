@@ -22,12 +22,12 @@ export default function Index() {
         contentContainerStyle={{ minHeight: "100%", paddingBottom: 10 }}>
         {/* Logo */}
         <Image source={icons.logoInservio} className="w-14 h-14 mt-20 mb-4 mx-auto" />
-        <View className="flex-1 mt-5">
-          {/* Search */}
-          <SearchBar />
-        </View>
+
+        {/* Search */}
+        <SearchBar />
+
         {/* Categories */}
-        <Text className="text-lg font-bold text-white mt-8 mb-4">
+        <Text className="text-lg font-bold text-white mt-4 mb-4">
           BROWSE BY CATEGORIES
         </Text>
 
@@ -36,7 +36,7 @@ export default function Index() {
             <CategoryCard
               key={cat.id}
               title={cat.title}
-              imagaes={cat.image}
+              images={cat.image}
               onPress={() => console.log("Go to", cat.title)}
             />
           ))}
