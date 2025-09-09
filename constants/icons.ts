@@ -3,11 +3,12 @@ import logoInservio from '@/assets/icon/logoInservio.png';
 import Logo from '@/assets/icon/Ngangxanh.png';
 import profile from '@/assets/icon/profile.png';
 import search from '@/assets/icon/search.png';
-
+import stuff from '@/assets/icon/stuff.png';
 export const icons = {
     Home,
     Logo,
     profile,
     search,
-    logoInservio
-}
+    logoInservio,
+    stuff
+};

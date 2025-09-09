@@ -1,6 +1,5 @@
 import { icons } from "@/constants/icons";
 import { Tabs } from "expo-router";
-import React from 'react';
 import { Image, View } from 'react-native';
 
 const TabIcon = ({ icon, focused }: { icon: any, focused: boolean }) => {
@@ -19,12 +18,14 @@ const TabIcon = ({ icon, focused }: { icon: any, focused: boolean }) => {
 const _Layout = () => {
     return (
         <Tabs
+            //  Set the initial route to "index" (which now shows search content)           
+            initialRouteName="index"
             screenOptions={{
                 tabBarShowLabel: false,
                 tabBarActiveTintColor: '#ffffff',
                 tabBarInactiveTintColor: '#cccccc',
                 tabBarStyle: {
-                    backgroundColor: '#000055',
+                    backgroundColor: '#000066CC',
                     borderTopWidth: 1,
                     borderTopColor: '#E5E5E7',
                     height: 84,
@@ -34,7 +35,7 @@ const _Layout = () => {
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: 'Home',
+                    title: 'Search',
                     headerShown: false,
                     tabBarIcon: ({ focused }) => (
                         <TabIcon icon={icons.Home} focused={focused} />
@@ -44,7 +45,7 @@ const _Layout = () => {
             <Tabs.Screen
                 name="search"
                 options={{
-                    title: 'Search',
+                    title: 'Home',
                     headerShown: false,
                     tabBarIcon: ({ focused }) => (
                         <TabIcon icon={icons.search} focused={focused} />
@@ -54,7 +55,7 @@ const _Layout = () => {
             <Tabs.Screen
                 name="profile"
                 options={{
-                    title: 'Profile',
+                    title: 'profile',
                     headerShown: false,
                     tabBarIcon: ({ focused }) => (
                         <TabIcon icon={icons.profile} focused={focused} />

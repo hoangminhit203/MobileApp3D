@@ -11,16 +11,18 @@ export default function CategoriesCard({ title, images, onPress }: CategoryCardP
         <TouchableOpacity
             onPress={onPress}
             activeOpacity={0.9}
-            className="w-[48%] bg-cyan-800 rounded-2xl mb-4 shadow-md"
+            className="bg-white rounded-xl shadow-md overflow-hidden h-40" // cố định chiều cao
         >
             {/* Ảnh */}
-            <View className="w-full h-20 rounded-t-2xl overflow-hidden bg-gray-100">
-                <Image source={images} className="w-full h-full" resizeMode="cover" />
+            <View className="flex-1 items-center justify-center bg-gray-100">
+                <Image source={images} className="w-20 h-20" resizeMode="contain" />
             </View>
 
             {/* Text */}
-            <View className="p-3">
-                <Text className="text-black font-bold text-sm">{title}</Text>
+            <View className="py-2 items-center">
+                <Text className="text-black font-bold text-xs uppercase text-center" numberOfLines={1}>
+                    {title}
+                </Text>
             </View>
         </TouchableOpacity>
     );
