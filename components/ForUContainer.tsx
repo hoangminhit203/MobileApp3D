@@ -27,6 +27,7 @@ const ForUContainer: React.FC<Props> = ({ sectionTitle, route, items }) => {
         <Link className="text-sm text-gray-500" href={{ pathname: "/[category]", params: { category: route } }}>See all</Link>
       </View>
 
+      {/* Load Items of Container */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {items.map((item) => (
           <ForUItem

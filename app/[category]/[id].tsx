@@ -10,9 +10,11 @@ export default function Detail() {
     id: string;
   }>();
 
+  // Find products by category
   const products = seed.find(
     (item) => item.route.toLowerCase() === category?.toLowerCase()
   );
+  // Find product by id
   const product = products?.data.find(
     (item) => item.id.toLowerCase() === id?.toLowerCase()
   );
@@ -29,6 +31,7 @@ export default function Detail() {
   return (
     <SafeAreaView className="flex-1">
       <ScrollView className="bg-white">
+        {/* Img area */}
         <View className="relative">
           <Image
             source={{ uri: product.imageUrl }}
@@ -43,6 +46,7 @@ export default function Detail() {
           </TouchableOpacity>
         </View>
 
+        {/* Description */}
         <View className="p-4 rounded-t-3xl bg-red-500">
           <Text className="text-3xl uppercase font-bold mt-5 mb-1">{product.title}</Text>
           <Text className="text-gray-500 mb-4">{product.code}</Text>

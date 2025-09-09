@@ -13,6 +13,7 @@ type Props = {
 const ForUItem: React.FC<Props> = ({ id, route, title, category, code, imageUrl }) => {
   return (
     <View className="bg-white rounded-lg shadow-2xl w-48 mr-4 py-4 px-3">
+      {/* Exp: /furniture/furniture-1 */}
       <Link  href={{ pathname: "/[category]/[id]", params: { category: route, id: id } }}>
           <Image
             source={{uri: imageUrl}}
