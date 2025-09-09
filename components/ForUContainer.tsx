@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
 import React from "react";
-
 import { ScrollView, Text, View } from "react-native";
+
 import ForUItem from "./ForUItem";
 
 type Item = {
@@ -22,7 +22,7 @@ type Props = {
 const ForUContainer: React.FC<Props> = ({ sectionTitle, route, items }) => {
   return (
     <View className="mb-6">
-      <View className="flex flex-row justify-between items-center mb-3 px-1">
+      <View className="flex flex-row justify-between items-center mb-3">
         <Text className="text-lg font-bold uppercase">{sectionTitle}</Text>
         <Link className="text-sm text-gray-500" href={{ pathname: "/[category]", params: { category: route } }}>See all</Link>
       </View>
