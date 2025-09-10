@@ -13,7 +13,7 @@ export default function CategoryPage() {
     return (
         <View className="flex-1">
             <View className="pt-12 pb-6 px-4 rounded-b-3xl">
-                <Text className="text-3xl font-bold text-white text-center">{category.charAt(0).toUpperCase() + category.slice(1)}</Text>
+                <Text className="text-3xl font-bold text-slate-200 text-center">{category.charAt(0).toUpperCase() + category.slice(1)}</Text>
 
                 <ScrollView
                     horizontal

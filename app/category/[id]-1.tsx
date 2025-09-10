@@ -61,7 +61,7 @@ export default function Detail() {
                 </View>
 
                 <TouchableOpacity className="bg-green-500 py-3 rounded-xl mb-6">
-                    <Text className="text-center text-white font-bold text-lg">
+                    <Text className="text-center text-slate-200 font-bold text-lg">
                         BUILD AGAIN
                     </Text>
                 </TouchableOpacity>

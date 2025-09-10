@@ -23,8 +23,8 @@ const ForUContainer: React.FC<Props> = ({ sectionTitle, route, items }) => {
     return (
         <View className="mb-6">
             <View className="flex flex-row justify-between items-center mb-3 px-1">
-                <Text className="text-lg font-bold uppercase text-white">{sectionTitle}</Text>
-                <Link className="text-sm text-white" href={`/category/${route}` as any}>See all</Link>
+                <Text className="text-lg font-bold uppercase text-slate-200">{sectionTitle}</Text>
+                <Link className="text-sm text-slate-200" href={`/category/${route}` as any}>See all</Link>
             </View>
 
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>

@@ -27,7 +27,7 @@ export default function Index() {
         resizeMode="cover"
       >
         <Text
-          className={`uppercase font-extrabold px-4 ${
+          className={`uppercase font-extrabold px-4 text-slate-200 ${
             isSticky ? "text-2xl text-center py-3" : "text-4xl"
           }`}
         >
