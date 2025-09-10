@@ -1,8 +1,8 @@
 import { getAllCatalog } from "@/api/catelogApi";
+import { CatalogItem } from "@/types/catalog";
 import { useEffect, useState } from "react";
-
 export function useCatalog() {
-    const [items, setItems] = useState<any[]>([]);
+    const [items, setItems] = useState<CatalogItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

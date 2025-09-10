@@ -1,22 +1,15 @@
 import { Link } from "expo-router";
 import React from "react";
 
+import { CatalogItem } from "@/types/catalog";
 import { ScrollView, Text, View } from "react-native";
 import ForUItem from "./ForUItem";
 
-type Item = {
-  id: string;
-  title: string;
-  category: string;
-  code: string;
-  description: string;
-  imageUrl: string;
-};
 
 type Props = {
   sectionTitle: string;
   route: string;
-  items: Item[];
+  items: CatalogItem[];
 };
 
 const ForUContainer: React.FC<Props> = ({ sectionTitle, route, items }) => {
@@ -35,13 +28,11 @@ const ForUContainer: React.FC<Props> = ({ sectionTitle, route, items }) => {
         <View className="flex-row gap-x-4">
           {items.map((item) => (
             <ForUItem
-              key={item.id}
+              key={item.clientId}
               route={route}
-              id={item.id}
-              title={item.title}
-              category={item.category}
-              code={item.code}
-              imageUrl={item.imageUrl}
+              id={item._id}
+              title={item.name}
+              imageUrl={item.properties.product.item3D.files.poster}
             />
           ))}
         </View>

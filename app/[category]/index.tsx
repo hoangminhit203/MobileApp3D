@@ -75,21 +75,21 @@ export default function CategoryPage() {
         >
           {categories.length > 0
             ? categories.slice(0, 5).map((cat) => (
-                <TouchableOpacity
-                  key={cat.id}
-                  className="bg-white px-4 py-2 rounded-full mr-2"
-                >
-                  <Text className="text-gray-700">{cat.name}</Text>
-                </TouchableOpacity>
-              ))
+              <TouchableOpacity
+                key={cat.id}
+                className="bg-white px-4 py-2 rounded-full mr-2"
+              >
+                <Text className="text-gray-700">{cat.name}</Text>
+              </TouchableOpacity>
+            ))
             : ["Bench", "Beds", "Kitchens", "Tables", "Chairs"].map((tag) => (
-                <TouchableOpacity
-                  key={tag}
-                  className="bg-white px-4 py-2 rounded-full mr-2"
-                >
-                  <Text className="text-gray-700">{tag}</Text>
-                </TouchableOpacity>
-              ))}
+              <TouchableOpacity
+                key={tag}
+                className="bg-white px-4 py-2 rounded-full mr-2"
+              >
+                <Text className="text-gray-700">{tag}</Text>
+              </TouchableOpacity>
+            ))}
         </ScrollView>
       </View>
 
@@ -116,8 +116,6 @@ export default function CategoryPage() {
                 route={category}
                 id={item.id}
                 title={item.title}
-                category={item.category}
-                code={item.code}
                 imageUrl={item.imageUrl}
               />
             ))}

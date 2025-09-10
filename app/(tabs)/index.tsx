@@ -1,16 +1,32 @@
+import { getType } from "@/api/apiClient";
 import FoUContainer from "@/components/FoUContainer";
 import { images } from "@/constants/images";
-import seed from "@/interfaces/seedData";
-import { useState } from "react";
+import { useCatalog } from "@/hooks/useCatelog";
+import { CatalogType } from "@/types/catalog";
+import { useEffect, useState } from "react";
 import { Image, ImageBackground, ScrollView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+  const { items, loading } = useCatalog();
+  console.log(items, "itemsitems")
   // State xác định sticky header
   const [isSticky, setIsSticky] = useState(false);
+  const [catalogs, setCatalog] = useState([] as CatalogType[]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getType(); // payload mẫu
+        console.log("===>>>>", data)
+        setCatalog(data);
+        console.log("getType result:", data);
+      } catch (error) {
+        console.error("Failed to fetch type:", error);
+      }
+    };
 
-  // State for items from API or other source
-  const [items, setItems] = useState<any[]>([]);
+    fetchData();
+  }, []);
 
   const handleScroll = (event: any) => {
     const y = event.nativeEvent.contentOffset.y;
@@ -52,12 +68,14 @@ export default function Index() {
             items={items.slice(0, 4)} // Hiển thị 4 sản phẩm đầu tiên từ API
           />
         ) : (
-          seed.map((section) => (
+          catalogs.map((catalog) => (
             <FoUContainer
-              key={section.route}
-              sectionTitle={section.sectionTitle}
-              route={section.route}
-              items={section.data.slice(0, 4)} // Fallback với dữ liệu seed
+              key={catalog._id}
+              sectionTitle={catalog.name}
+              route={catalog.name}
+              items={items.filter(item => {
+                return item.typeId === catalog._id
+              })}
             />
           ))
         )}

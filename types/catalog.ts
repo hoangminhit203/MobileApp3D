@@ -24,6 +24,7 @@ export interface CatalogItem {
     typeId: string;
 }
 
+
 export interface Product3D {
     instructions: Instructions;
     tutorials: Tutorials;
@@ -35,6 +36,7 @@ export interface Product3D {
         question: any[];
         step: Step[];
     };
+    item3D: Item3D
 }
 
 export interface Instructions {
@@ -154,4 +156,9 @@ export interface SpecSection {
         right: string;
         top: string;
     };
+}
+export interface CatalogType {
+    _id: string;
+    name: string;
+
 }
