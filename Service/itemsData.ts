@@ -4,7 +4,7 @@ const jwt =
 export const fetchAllItems = async () => {
     const res = await fetch("http://35.238.30.208:58203/catalog/items/all", {
         headers: {
-            Authorization: `Bearer ${jwt}`, // ✅ sửa lại ở đây
+            Authorization: `Bearer ${jwt}`, //  sửa lại ở đây
             "Content-Type": "application/json",
         },
     });
