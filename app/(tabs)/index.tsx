@@ -1,5 +1,4 @@
 import FoUContainer from "@/components/FoUContainer";
-import SearchBar from "@/components/SearchBar";
 import { images } from "@/constants/images";
 import seed from "@/interfaces/seedData";
 import { useState } from "react";
@@ -30,7 +29,7 @@ export default function Index() {
         resizeMode="cover"
       >
         <Text
-          className={`uppercase font-extrabold px-4 ${isSticky ? "text-2xl text-center py-3" : "text-4xl"
+          className={`uppercase font-extrabold px-4 text-slate-200 ${isSticky ? "text-2xl text-center py-3" : "text-4xl"
             }`}
         >
           For You
@@ -44,8 +43,6 @@ export default function Index() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 20, paddingTop: 60 }}
       >
-        {/* Search Bar */}
-        <SearchBar />
 
         {/* Product Sections */}
         {items.length > 0 ? (
