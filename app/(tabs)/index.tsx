@@ -10,6 +10,9 @@ export default function Index() {
   // State xác định sticky header
   const [isSticky, setIsSticky] = useState(false);
 
+  // State for items from API or other source
+  const [items, setItems] = useState<any[]>([]);
+
   const handleScroll = (event: any) => {
     const y = event.nativeEvent.contentOffset.y;
     setIsSticky(y > 80); // khi cuộn xuống quá 80px thì stick header

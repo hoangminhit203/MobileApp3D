@@ -18,27 +18,27 @@ export default function Index() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    // Fallback categories
-    const fallbackCategories = [
-        { id: 1, title: "FURNITURE", image: images.hansrobot },
-        { id: 2, title: "TOYS", image: images.hubspot },
-        { id: 3, title: "SPORTS", image: images.yamaha },
-        { id: 4, title: "BABY + KIDS", image: images.hansrobot },
-        { id: 5, title: "ELECTRONICS", image: images.hubspot },
-        { id: 6, title: "HOBBIES", image: images.yamaha },
-    ];
+    // REMOVED FALLBACK - NOW USING FAKE DATA FROM SERVICE
+    // const fallbackCategories = [
+    //     { id: 1, title: "FURNITURE", image: images.hansrobot },
+    //     { id: 2, title: "TOYS", image: images.hubspot },
+    //     { id: 3, title: "SPORTS", image: images.yamaha },
+    //     { id: 4, title: "BABY + KIDS", image: images.hansrobot },
+    //     { id: 5, title: "ELECTRONICS", image: images.hubspot },
+    //     { id: 6, title: "HOBBIES", image: images.yamaha },
+    // ];
 
     useEffect(() => {
         async function loadCategories() {
             try {
                 setLoading(true);
-                const data = await fetchAllCategories();
+                const data = await fetchAllCategories(); // Now returns fake data
                 setCategories(data);
+                setError(""); // Clear any previous errors
             } catch (err: any) {
                 console.error("Failed to fetch categories:", err);
                 setError(err.message);
-                // Use fallback categories
-                setCategories(fallbackCategories);
+                setCategories([]); // Set empty array on error
             } finally {
                 setLoading(false);
             }
@@ -53,7 +53,7 @@ export default function Index() {
 
     const handleCategoryPress = (category: any) => {
         if (category.id) {
-            router.push(`/category?category=${category.title.toLowerCase()}`);
+            router.push(`/category/${category.title.toLowerCase()}` as any);
         }
     };
 
@@ -112,23 +112,32 @@ export default function Index() {
                 {error && (
                     <View className="py-4">
                         <Text className="text-red-300 text-center">
-                            Failed to load categories. Showing default categories.
+                            Error: {error}
                         </Text>
                     </View>
                 )}
 
-                {/* Grid Categories */}
-                <View className="flex-row flex-wrap justify-between">
-                    {(categories.length > 0 ? categories : fallbackCategories).map((cat) => (
-                        <View key={cat.id} className="basis-[48%] mb-4">
-                            <CategoryCard
-                                title={cat.title || cat.name}
-                                images={cat.image || images.hansrobot}
-                                onPress={() => handleCategoryPress(cat)}
-                            />
-                        </View>
-                    ))}
-                </View>
+                {/* Grid Categories - Now using only fake data */}
+                {!loading && categories.length > 0 && (
+                    <View className="flex-row flex-wrap justify-between">
+                        {categories.map((cat: any) => (
+                            <View key={cat.id} className="basis-[48%] mb-4">
+                                <CategoryCard
+                                    title={cat.title || cat.name}
+                                    images={cat.image || images.hansrobot}
+                                    onPress={() => handleCategoryPress(cat)}
+                                />
+                            </View>
+                        ))}
+                    </View>
+                )}
+
+                {/* Show message if no categories loaded */}
+                {!loading && categories.length === 0 && !error && (
+                    <View className="py-8">
+                        <Text className="text-white text-center">No categories available</Text>
+                    </View>
+                )}
             </ScrollView>
         </View>
     );
