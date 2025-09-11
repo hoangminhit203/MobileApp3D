@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const { items, loading } = useCatalog();
-  console.log(items, "itemsitems")
+  //console.log(items, "itemsitems")
   // State xác định sticky header
   const [isSticky, setIsSticky] = useState(false);
   const [catalogs, setCatalog] = useState([] as CatalogType[]);
@@ -66,9 +66,10 @@ export default function Index() {
             key={catalog._id}
             sectionTitle={catalog.name}
             route={catalog.name}
+            _id={catalog._id}
             items={items.filter(item => {
               return item.typeId === catalog._id
-            })}
+            }).slice(0, 6)}
           />
         ))}
 

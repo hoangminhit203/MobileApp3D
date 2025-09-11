@@ -9,17 +9,18 @@ import ForUItem from "./ForUItem";
 type Props = {
   sectionTitle: string;
   route: string;
+  _id: string;
   items: CatalogItem[];
 };
 
-const ForUContainer: React.FC<Props> = ({ sectionTitle, route, items }) => {
+const ForUContainer: React.FC<Props> = ({ sectionTitle, route, _id, items }) => {
   return (
     <View className="mb-6">
       <View className="flex flex-row justify-between items-center mb-3 px-1">
         <Text className="text-lg font-bold uppercase text-slate-200">
           {sectionTitle}
         </Text>
-        <Link className="text-sm text-slate-200" href={`/${route}` as any}>
+        <Link className="text-sm text-slate-200" href={`/${route}?_id=${_id}` as any}>
           See all
         </Link>
       </View>
