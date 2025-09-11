@@ -1,5 +1,5 @@
 import CategoryCard from "@/components/CategoriesCard";
-import ForUItem from "@/components/ForUItem";
+import ProductItem from "@/components/ProductItem";
 import SearchBar from "@/components/SearchBar";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
@@ -84,7 +84,7 @@ export default function Index() {
                         </Text>
                         <View className="flex-row flex-wrap justify-between gap-y-4">
                             {searchResults.map((item) => (
-                                <ForUItem
+                                <ProductItem
                                     key={item.id}
                                     route="search"
                                     id={item.id}

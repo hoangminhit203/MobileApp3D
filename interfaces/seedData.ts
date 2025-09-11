@@ -50,6 +50,7 @@ const seed = [
                 code: "A-DIY", 
                 imageUrl: "https://reactjs.org/logo-og.png",
                 description: 'ktisfdsfkdsflskdafjkdsfj;dslkj;ákfjsdafjsdkafjsdakfsdjlfkdsjfkasjfkdsjafasdfafdsfsd'},
+                
 
         ]
 

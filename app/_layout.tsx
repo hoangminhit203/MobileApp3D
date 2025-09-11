@@ -1,6 +1,6 @@
 import { CatalogProvider } from "@/Context/CatalogContext";
 import { Stack } from "expo-router";
-import "./gobals.css";
+import "./globals.css";
 export default function RootLayout() {
   return (
     <CatalogProvider>
@@ -12,13 +12,13 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
-          name="[category]"
+          name="[catalog]"
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="movie/[id]"
+          name="model3d/[id]"
           options={{
             headerShown: false,
           }}
