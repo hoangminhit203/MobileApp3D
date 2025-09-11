@@ -23,7 +23,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 // Component con của BottomSheet
-function BottomSheetContent({ product, checkFilter, id }: { product: CatalogItem, checkFilter: any, id: string }) {
+function BottomSheetContent({ product, checkFilter, id, router }: { product: CatalogItem, checkFilter: any, id: string, router: any }) {
   const { animatedIndex } = useBottomSheetInternal();
 
 
@@ -95,7 +95,10 @@ function BottomSheetContent({ product, checkFilter, id }: { product: CatalogItem
 
 
           {/* Button */}
-          <TouchableOpacity className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-4">
+          <TouchableOpacity
+            onPress={() => router.push(`/model3d/page?id=${id}`)}
+            className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-4"
+          >
             <Text className="text-center uppercase text-slate-200 font-bold text-lg">
               Start Build
             </Text>
@@ -200,7 +203,7 @@ export default function Detail() {
         snapPoints={snapPoints}
         backgroundStyle={{ borderTopLeftRadius: 30, borderTopRightRadius: 30 }}
       >
-        <BottomSheetContent product={product} checkFilter={checkFilter} id={id} />
+        <BottomSheetContent product={product} checkFilter={checkFilter} id={id} router={router} />
       </BottomSheet>
     </SafeAreaView>
   );
