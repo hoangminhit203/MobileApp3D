@@ -61,24 +61,17 @@ export default function Index() {
       >
 
         {/* Product Sections */}
-        {items.length > 0 ? (
+        {catalogs.map((catalog) => (
           <FoUContainer
-            sectionTitle="Items from API"
-            route="/items"
-            items={items.slice(0, 4)} // Hiển thị 4 sản phẩm đầu tiên từ API
+            key={catalog._id}
+            sectionTitle={catalog.name}
+            route={catalog.name}
+            items={items.filter(item => {
+              return item.typeId === catalog._id
+            })}
           />
-        ) : (
-          catalogs.map((catalog) => (
-            <FoUContainer
-              key={catalog._id}
-              sectionTitle={catalog.name}
-              route={catalog.name}
-              items={items.filter(item => {
-                return item.typeId === catalog._id
-              })}
-            />
-          ))
-        )}
+        ))}
+
       </ScrollView>
     </SafeAreaView>
   );

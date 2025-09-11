@@ -96,7 +96,7 @@ export default function Detail() {
           <Text className="text-gray-700 leading-6">{product.description}</Text>
         </BottomSheetScrollView>
       </BottomSheet>
-          
+
 
     </SafeAreaView>
   );

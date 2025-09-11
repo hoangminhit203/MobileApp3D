@@ -28,11 +28,11 @@ const ForUContainer: React.FC<Props> = ({ sectionTitle, route, items }) => {
         <View className="flex-row gap-x-4">
           {items.map((item) => (
             <ForUItem
-              key={item.clientId}
+              key={item._id}
               route={route}
               id={item._id}
               title={item.name}
-              imageUrl={item.properties.product.item3D.files.poster}
+              imageUrl={item.properties.product?.item3D.files?.poster}
             />
           ))}
         </View>
