@@ -15,8 +15,10 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
         try {
             const errData = await res.json();
             errMessage = errData?.message || errMessage;
+            console.log("Bug", errMessage)
         } catch { }
         throw new Error(errMessage);
+
     }
 
     return res.json();
