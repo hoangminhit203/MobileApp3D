@@ -13,26 +13,51 @@ export default function ImportStudio() {
   const [tab, setTab] = useState(queryTab || "part");
   const validTabs = ["part", "tutorial", "multiActions"];
 
-  // Fetch catalog bằng fetch API
+  // COMMENTED OUT API CALL - Using fake data instead
   const fetchCatalog = async (catalogId: string) => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `https://your-api.com/catalog/items?slut=${catalogId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Use fake catalog data
+      const fakeCatalog = {
+        properties: {
+          product: {
+            name: `Fake Product ${catalogId}`,
+            instructions: {
+              tutorials: {
+                step: [
+                  { tts: "Step 1 instruction" },
+                  { tts: "Step 2 instruction" },
+                  { tts: "Step 3 instruction" }
+                ]
+              }
+            }
+          }
         }
-      );
+      };
 
-      if (!res.ok) {
-        throw new Error(`API error: ${res.status}`);
-      }
+      setCatalog(fakeCatalog);
+      console.log("Using fake catalog data for:", catalogId);
 
-      const data = await res.json();
-      setCatalog(data);
+      // COMMENTED OUT REAL API CALL
+      // const res = await fetch(
+      //   `https://your-api.com/catalog/items?slut=${catalogId}`,
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+
+      // if (!res.ok) {
+      //   throw new Error(`API error: ${res.status}`);
+      // }
+
+      // const data = await res.json();
+      // setCatalog(data);
     } catch (error) {
       console.error("Error fetching catalog:", error);
       navigation.goBack(); // giống createError(404)
@@ -60,32 +85,48 @@ export default function ImportStudio() {
     }
   };
 
-  // Save TTS bằng fetch
+  // COMMENTED OUT API CALL - Save TTS bằng fake implementation
   const saveTts = async (step: number, tts: string) => {
     try {
-      const updatedSteps =
-        catalog.properties.product.instructions.tutorials.step;
-      updatedSteps[step].tts = tts;
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 200));
 
-      const res = await fetch("https://your-api.com/catalog/items", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: {
-            "properties.product.instructions.tutorials.step": updatedSteps,
-          },
-          slut: id,
-        }),
-      });
+      // Fake implementation - just log the save action
+      console.log(`Fake save TTS for step ${step}:`, tts);
 
-      if (!res.ok) {
-        throw new Error(`API error: ${res.status}`);
+      if (catalog?.properties?.product?.instructions?.tutorials?.step) {
+        const updatedSteps = catalog.properties.product.instructions.tutorials.step;
+        if (updatedSteps[step]) {
+          updatedSteps[step].tts = tts;
+        }
       }
 
-      const result = await res.json();
-      console.log("TTS updated:", result);
+      console.log("TTS updated (fake):", { step, tts });
+
+      // COMMENTED OUT REAL API CALL
+      // const updatedSteps =
+      //   catalog.properties.product.instructions.tutorials.step;
+      // updatedSteps[step].tts = tts;
+
+      // const res = await fetch("https://your-api.com/catalog/items", {
+      //   method: "PUT",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     data: {
+      //       "properties.product.instructions.tutorials.step": updatedSteps,
+      //     },
+      //     slut: id,
+      //   }),
+      // });
+
+      // if (!res.ok) {
+      //   throw new Error(`API error: ${res.status}`);
+      // }
+
+      // const result = await res.json();
+      // console.log("TTS updated:", result);
     } catch (error) {
       console.error("Error saving TTS:", error);
     }

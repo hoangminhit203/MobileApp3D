@@ -1,7 +1,9 @@
-import { getType } from "@/api/apiClient";
+// COMMENTED OUT API CALL - USING SEED DATA INSTEAD
+// import { getType } from "@/api/apiClient";
 import FoUContainer from "@/components/FoUContainer";
 import { images } from "@/constants/images";
 import { useCatalog } from "@/hooks/useCatelog";
+import seedData from "@/interfaces/seedData";
 import { CatalogType } from "@/types/catalog";
 import { useEffect, useState } from "react";
 import { Image, ImageBackground, ScrollView, Text } from "react-native";
@@ -13,13 +15,27 @@ export default function Index() {
   // State xác định sticky header
   const [isSticky, setIsSticky] = useState(false);
   const [catalogs, setCatalog] = useState([] as CatalogType[]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getType(); // payload mẫu
-        console.log("===>>>>", data)
-        setCatalog(data);
-        console.log("getType result:", data);
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // Convert seed data to catalog types
+        const catalogTypes: CatalogType[] = seedData.map(section => ({
+          _id: section.route,
+          name: section.sectionTitle
+        }));
+
+        setCatalog(catalogTypes);
+        console.log("Using seed data for catalogs:", catalogTypes);
+
+        // COMMENTED OUT API CALL
+        // const data = await getType(); // payload mẫu
+        // console.log("===>>>>", data)
+        // setCatalog(data);
+        // console.log("getType result:", data);
       } catch (error) {
         console.error("Failed to fetch type:", error);
       }
