@@ -90,13 +90,13 @@ function BottomSheetContent({ product, checkFilter, id, router }: { product: Cat
             <View className="items-center">
               <Ionicons name="construct-outline" size={20} color="green" />
               <Text className="text-md">1</Text>
-            </View>
+            </View>X
           </View>
 
 
           {/* Button */}
           <TouchableOpacity
-            onPress={() => router.push(`/model3d/page?id=${id}`)}
+            onPress={() => router.push(`/model3d/builder?id=${id}`)}
             className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-4"
           >
             <Text className="text-center uppercase text-slate-200 font-bold text-lg">
@@ -129,8 +129,9 @@ function BottomSheetContent({ product, checkFilter, id, router }: { product: Cat
 
           {/* Images */}
           <ScrollView horizontal >
-            {product.properties.image.map((item) => (
+            {product.properties.image.map((item, index) => (
               <Image
+                key={index}
                 source={item as any}
                 className="w-6 h-6"
                 resizeMode="contain"

@@ -18,7 +18,7 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
-          name="movie/[id]"
+          name="model3d/builder"
           options={{
             headerShown: false,
           }}
