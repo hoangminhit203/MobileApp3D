@@ -9,7 +9,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const { items, loading } = useCatalog();
-  //console.log(items, "itemsitems")
   // State xác định sticky header
   const [isSticky, setIsSticky] = useState(false);
   const [catalogs, setCatalog] = useState([] as CatalogType[]);
@@ -17,9 +16,7 @@ export default function Index() {
     const fetchData = async () => {
       try {
         const data = await getType(); // payload mẫu
-        console.log("===>>>>", data);
         setCatalog(data);
-        console.log("getType result:", data);
       } catch (error) {
         console.error("Failed to fetch type:", error);
       }

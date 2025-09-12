@@ -27,9 +27,9 @@ const ProductList: React.FC<Props> = ({
     ? BottomSheetScrollView
     : ScrollView;
   return (
-    <View className="mb-6 flex-1">
+    <View className="mb-6 flex-1 px-1">
       {/* Header */}
-      <View className="flex flex-row justify-between items-center mb-3 px-1">
+      <View className="flex flex-row justify-between items-center">
         <Text className={`text-lg font-bold uppercase ${mainColor}`}>
           {catalogName}
         </Text>
@@ -46,20 +46,20 @@ const ProductList: React.FC<Props> = ({
 
       {/* empty items */}
       {items.length === 0 ? (
-        <View className="px-1 py-6">
+        <View className="py-6">
           <Text className="text-light text-center text-md italic">
             Không có sản phẩm nào
           </Text>
         </View>
       ) : (
-        <Container horizontal showsHorizontalScrollIndicator={false}>
+        <Container horizontal showsHorizontalScrollIndicator={false} className="py-3">
           <View className="flex-row gap-x-4">
             {items.map((item) => (
               <ProductItem
                 key={item._id}
                 id={item._id}
                 href={href}
-                name={item.name}
+                name={item.properties.product?.item3D.name}
                 imageUrl={item.properties.product?.item3D.files?.poster}
               />
             ))}

@@ -9,6 +9,7 @@ module.exports = {
         primary: "#030014",
         secondary: "#151312",
         light: "#e2e8f0",
+        bgColor: '#f1f2f6'
       },
     },
   },

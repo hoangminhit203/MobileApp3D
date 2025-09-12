@@ -10,7 +10,7 @@ type Props = {
 
 const ProductItem: React.FC<Props> = ({ id, href, name, imageUrl }) => {
   return (
-    <View className="bg-white rounded-lg shadow-xl shadow-gray-700 w-48 py-4 px-3">
+    <View className="bg-white rounded-lg shadow-md w-48 py-4 px-3">
       <Link
         href={{
           pathname: "/[catalog]/[id]" as any,
@@ -24,7 +24,13 @@ const ProductItem: React.FC<Props> = ({ id, href, name, imageUrl }) => {
         />
 
         <View className="pt-3">
-          <Text className="text-xl">{name}</Text>
+          <Text
+            className="text-xl"
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {name}
+          </Text>
         </View>
       </Link>
     </View>

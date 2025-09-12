@@ -10,13 +10,11 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
             ...(options.headers || {}),
         },
     });
-    console.log(res,"res")
     if (!res.ok) {
         let errMessage = `HTTP error ${res.status}`;
         try {
             const errData = await res.json();
             errMessage = errData?.message || errMessage;
-            console.log("Bug", errMessage)
         } catch { }
         throw new Error(errMessage);
 
