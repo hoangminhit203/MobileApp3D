@@ -6,7 +6,7 @@ import BottomSheet, {
   BottomSheetScrollView,
   useBottomSheetInternal,
 } from "@gorhom/bottom-sheet";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useRef } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
@@ -56,7 +56,7 @@ function BottomSheetContent({
         style={[headerStyle]}
       >
         <Animated.Text style={[titleStyle]} className={"font-bold"}>
-          {product.properties.item3D.name}
+          {product.name}
         </Animated.Text>
         <Text className="text-gray-500">{product.createdAt}</Text>
       </Animated.View>
@@ -96,7 +96,7 @@ function BottomSheetContent({
           </View>
 
           {/* Button */}
-          <TouchableOpacity className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-20">
+          <TouchableOpacity onPress={() => router.push(`/model3d/page?id=${id}`)} className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-20">
             <Text className="text-center uppercase text-light font-extrabold text-xl">
               Start Build
             </Text>
