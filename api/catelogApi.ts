@@ -1,4 +1,4 @@
-const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU1OTBlNGFlNTY4OWE0ODVjMjVlMzEiLCJlbWFpbCI6InByb3JvY2ttYW4xMTNAZ21haWwuY29tIiwiaWF0IjoxNzU3NjUyMDQ0LCJleHAiOjE3NTc2OTUyNDR9.j730diTpn3iKbDMP_qyy1nUok9MSTSxb9YOmC5IPIvE";
+const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU1OTBlNGFlNTY4OWE0ODVjMjVlMzEiLCJlbWFpbCI6InByb3JvY2ttYW4xMTNAZ21haWwuY29tIiwiaWF0IjoxNzU3NjUyMDQ0LCJleHAiOjE3NTc2OTUyNDR9.j730diTpn3iKbDMP_qyy1nUok9MSTSxb9YOmC5IPIvE";
 const BASE_URL = "http://35.238.30.208:58203";
 const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     const res = await fetch(`${BASE_URL}${url}`, {

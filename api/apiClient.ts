@@ -58,3 +58,26 @@ export const getType = async (): Promise<CatalogType[]> => {
         throw error;
     }
 };
+
+export const fetchItemById = async (itemId: string) => {
+    const res = await fetch(`http://35.238.30.208:58203/catalog/items/${itemId}`, {
+        headers: {
+            "x-testing-header": 'true',
+            Authorization: `Bearer ${jwt}`,
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (!res.ok) {
+        let errMessage = `HTTP error ${res.status}`;
+        try {
+            const errData = await res.json();
+            errMessage = errData?.message || errMessage;
+        } catch (e) {
+            // fallback nếu res không phải JSON
+        }
+        throw new Error(errMessage);
+    }
+
+    return res.json();
+};

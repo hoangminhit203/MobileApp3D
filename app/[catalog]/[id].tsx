@@ -111,10 +111,16 @@ function BottomSheetContent({
 
             {/* Button */}
             <TouchableOpacity
-              onPress={() => router.push(`/model3d/page?id=${id}`)}
-              className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-20"
+              onPress={() => {
+                if (product?.properties?.product?.instructions?.multiActions?.files?.glb) {
+                  router.push(`/model3d/page?id=${id}`);
+                } else {
+                  alert('3D model không khả dụng cho sản phẩm này');
+                }
+              }}
+              className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-20 active:bg-green-500 active:scale-95"
             >
-              <Text className="text-center uppercase text-light font-extrabold text-xl">
+              <Text className="text-center uppercase text-white font-extrabold text-xl">
                 Start Build
               </Text>
             </TouchableOpacity>

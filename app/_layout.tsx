@@ -1,6 +1,10 @@
 import { CatalogProvider } from "@/Context/CatalogContext";
 import { Stack } from "expo-router";
 import "./globals.css";
+
+// Import WebGL fixes early to suppress EXGL errors
+import "@/utils/webglFixes";
+
 export default function RootLayout() {
   return (
     <CatalogProvider>
@@ -19,6 +23,12 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="model3d/page"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="model3d/[id]"
           options={{
             headerShown: false,
           }}

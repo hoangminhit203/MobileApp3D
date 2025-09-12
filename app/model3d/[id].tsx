@@ -1,14 +1,29 @@
+import Model3DViewer from '@/components/Model3DViewer';
 import { useLocalSearchParams } from 'expo-router';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 const Model3dDetails = () => {
-    const { id } = useLocalSearchParams();
+    const { id } = useLocalSearchParams<{ id: string }>();
+
+    if (!id || typeof id !== 'string') {
+        return (
+            <SafeAreaView className="flex-1 bg-gray-100">
+                <View className="flex-1 justify-center items-center p-5">
+                    <Text className="text-red-500 text-base text-center">
+                        ID sản phẩm không hợp lệ
+                    </Text>
+                </View>
+            </SafeAreaView>
+        );
+    }
+
     return (
-        // Dùng id này để hiện từng sản phẩm 3d lên cho app mobile
-        <View>
-            <Text>Product Details: {id} </Text>
-        </View>
-    )
-}
-export default Model3dDetails
-const styles = StyleSheet.create({});
+        <Model3DViewer
+            itemId={id}
+            enableDebug={__DEV__}
+        />
+    );
+};
+
+export default Model3dDetails;
