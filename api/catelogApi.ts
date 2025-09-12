@@ -7,7 +7,6 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
             "x-testing-header": "true",
             Authorization: `Bearer ${jwt}`, // 🔹 gắn cứng jwt
             "Content-Type": "application/json",
-            "x-testing-header": 'true',
             ...(options.headers || {}),
         },
     });
