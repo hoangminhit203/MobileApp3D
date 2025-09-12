@@ -1,4 +1,4 @@
-import { getType } from "@/api/apiClient";
+import { getLoginUser, getType } from "@/api/apiClient";
 import { getAllCatalog } from "@/api/catelogApi";
 import { CatalogItem, CatalogType } from "@/types/catalog";
 import React, { createContext, useEffect, useState } from "react";
@@ -24,6 +24,9 @@ export const CatalogProvider: React.FC<{ children: React.ReactNode }> = ({
     const fetchData = async () => {
       try {
         setLoading(true);
+       const loginRes = await getLoginUser();
+      console.log("Login response:", loginRes);
+      
         const [itemsData, catalogsData] = await Promise.all([
           getAllCatalog(),
           getType(),
