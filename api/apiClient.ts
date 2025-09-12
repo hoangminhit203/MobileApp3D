@@ -1,13 +1,13 @@
 import { CatalogType } from "@/types/catalog";
 
 const jwt =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU1OTBlNGFlNTY4OWE0ODVjMjVlMzEiLCJlbWFpbCI6InByb3JvY2ttYW4xMTNAZ21haWwuY29tIiwiaWF0IjoxNzU3NjQ4NDM0LCJleHAiOjE3NTc2OTE2MzR9.m6GnkoJ65lAF7mkyyVo9y-ktFx5QgrOXHGlEs1qc2MY";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU1OTBlNGFlNTY4OWE0ODVjMjVlMzEiLCJlbWFpbCI6InByb3JvY2ttYW4xMTNAZ21haWwuY29tIiwiaWF0IjoxNzU3NjUyMDQ0LCJleHAiOjE3NTc2OTUyNDR9.j730diTpn3iKbDMP_qyy1nUok9MSTSxb9YOmC5IPIvE";
 
 export const fetchAllItems = async () => {
     const res = await fetch("http://35.238.30.208:58203/catalog/items/all", {
         headers: {
-            "x-testing-header": "true",
-            Authorization: `Bearer ${jwt}`, // ✅ sửa đúng template string
+            "x-testing-header": 'true',
+            Authorization: `Bearer ${jwt}`,
             "Content-Type": "application/json",
         },
     });
@@ -31,6 +31,7 @@ export const getType = async (): Promise<CatalogType[]> => {
         const response = await fetch(`http://35.238.30.208:58203/type/get`, {
             method: "POST",
             headers: {
+                "x-testing-header": 'true',
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${jwt}`, // nếu cần JWT thì thêm vào đây
             },
