@@ -1,9 +1,10 @@
-const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU1OTBlNGFlNTY4OWE0ODVjMjVlMzEiLCJlbWFpbCI6InByb3JvY2ttYW4xMTNAZ21haWwuY29tIiwiaWF0IjoxNzU3NTYyNDA4LCJleHAiOjE3NTc2MDU2MDh9.efwuQgKNlCS15m17kRNe6Bty-hpucZRIYFXP7rzd3tU";
+const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU1OTBlNGFlNTY4OWE0ODVjMjVlMzEiLCJlbWFpbCI6InByb3JvY2ttYW4xMTNAZ21haWwuY29tIiwiaWF0IjoxNzU3NjQ4NDM0LCJleHAiOjE3NTc2OTE2MzR9.m6GnkoJ65lAF7mkyyVo9y-ktFx5QgrOXHGlEs1qc2MY";
 const BASE_URL = "http://35.238.30.208:58203";
 const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     const res = await fetch(`${BASE_URL}${url}`, {
         ...options,
         headers: {
+            "x-testing-header": "true",
             Authorization: `Bearer ${jwt}`, // 🔹 gắn cứng jwt
             "Content-Type": "application/json",
             ...(options.headers || {}),

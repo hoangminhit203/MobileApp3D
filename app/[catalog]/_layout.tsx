@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import "../gobals.css";
+import "../globals.css";
 
 export default function CategoryLayout() {
   return (

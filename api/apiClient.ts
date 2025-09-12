@@ -1,12 +1,12 @@
 import { CatalogType } from "@/types/catalog";
 
 const jwt =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU1OTBlNGFlNTY4OWE0ODVjMjVlMzEiLCJlbWFpbCI6InByb3JvY2ttYW4xMTNAZ21haWwuY29tIiwiaWF0IjoxNzU3NTYyNDA4LCJleHAiOjE3NTc2MDU2MDh9.efwuQgKNlCS15m17kRNe6Bty-hpucZRIYFXP7rzd3tU";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU1OTBlNGFlNTY4OWE0ODVjMjVlMzEiLCJlbWFpbCI6InByb3JvY2ttYW4xMTNAZ21haWwuY29tIiwiaWF0IjoxNzU3NjQ4NDM0LCJleHAiOjE3NTc2OTE2MzR9.m6GnkoJ65lAF7mkyyVo9y-ktFx5QgrOXHGlEs1qc2MY";
 
 export const fetchAllItems = async () => {
     const res = await fetch("http://35.238.30.208:58203/catalog/items/all", {
         headers: {
-            "x-testing-header": "mobile",
+            "x-testing-header": "true",
             Authorization: `Bearer ${jwt}`, // ✅ sửa đúng template string
             "Content-Type": "application/json",
         },

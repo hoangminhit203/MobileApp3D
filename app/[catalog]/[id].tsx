@@ -1,5 +1,5 @@
-import ForUContainer from "@/components/FoUContainer";
-import { useCatalog } from "@/hooks/useCatelog";
+import ProductList from "@/components/ProductList";
+import { useCatalog } from "@/hooks/useCatalog";
 import { CatalogItem } from "@/types/catalog";
 import { Ionicons } from "@expo/vector-icons";
 import BottomSheet, {
@@ -8,56 +8,58 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useRef } from "react";
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-// Component con của BottomSheet
-function BottomSheetContent({ product, checkFilter, id }: { product: CatalogItem, checkFilter: any, id: string }) {
+
+// BottomSheet Scroll View
+function BottomSheetContent({
+  product,
+  checkFilter,
+  id,
+}: {
+  product: CatalogItem;
+  checkFilter: any;
+  id: string;
+}) {
   const { animatedIndex } = useBottomSheetInternal();
 
-
-  // Style animate cho header
   const headerStyle = useAnimatedStyle(() => {
     return {
       shadowOpacity: interpolate(animatedIndex.value, [0, 1], [0, 0.25]),
       shadowRadius: interpolate(animatedIndex.value, [0, 1], [0, 6]),
       elevation: interpolate(animatedIndex.value, [0, 1], [0, 6]),
       backgroundColor: "white",
-      paddingVertical: interpolate(animatedIndex.value, [0, 1], [16, 20]),
-      paddingHorizontal: interpolate(animatedIndex.value, [0, 1], [16, 35]),
+      paddingVertical: interpolate(animatedIndex.value, [0, 1], [0, 7]),
+      paddingHorizontal: interpolate(animatedIndex.value, [0, 1], [16, 40]),
     };
   });
-
   const titleStyle = useAnimatedStyle(() => {
     return {
-      fontSize: interpolate(animatedIndex.value, [0, 1], [28, 20]),
-      textAlign: interpolate(
-        animatedIndex.value,
-        [0, 1], [0, 1]
-      ) as any,
+      fontSize: interpolate(animatedIndex.value, [0, 1], [18, 20]),
+      transform: [
+        {
+          translateX: interpolate(animatedIndex.value, [0, 1], [0, 50]),
+        },
+      ],
     };
   });
 
-
   return (
-    <View style={{ flex: 1 }}>
+    <View className="flex-1 px-5">
       {/* Header cố định */}
-      <Animated.View style={[headerStyle, styles.header]}>
-        <Animated.Text>{product.name}</Animated.Text>
+      <Animated.View
+        className="absolute top-0 left-0 right-0 z-10 p-3"
+        style={[headerStyle]}
+      >
+        <Animated.Text style={[titleStyle]} className={"font-bold"}>
+          {product.properties.item3D.name}
+        </Animated.Text>
         <Text className="text-gray-500">{product.createdAt}</Text>
       </Animated.View>
-
 
       {/* Nội dung scroll */}
       <BottomSheetScrollView
@@ -70,78 +72,88 @@ function BottomSheetContent({ product, checkFilter, id }: { product: CatalogItem
       >
         <ScrollView className="flex-1">
           {/* Info section */}
-          <View className="flex-row justify-between mb-6 mt-2 px-10">
+          <View className="flex-row justify-between mb-6 px-14">
             <View className="items-center">
-              <Ionicons name="person-outline" size={20} color="green" />
+              <Ionicons name="person-outline" size={30} color="green" />
               <Text className="text-md">x1</Text>
             </View>
             <View className="items-center">
-              <Ionicons name="trending-up-outline" size={20} color="green" />
+              <Ionicons name="trending-up-outline" size={30} color="green" />
               <Text className="text-md">10</Text>
             </View>
             <View className="items-center">
-              <Ionicons name="time-outline" size={20} color="green" />
+              <Ionicons name="time-outline" size={30} color="green" />
               <Text className="text-md">1m</Text>
             </View>
             <View className="items-center">
-              <Ionicons name="layers-outline" size={20} color="green" />
+              <Ionicons name="layers-outline" size={30} color="green" />
               <Text className="text-md">10</Text>
             </View>
             <View className="items-center">
-              <Ionicons name="construct-outline" size={20} color="green" />
+              <Ionicons name="construct-outline" size={30} color="green" />
               <Text className="text-md">1</Text>
             </View>
           </View>
 
-
           {/* Button */}
-          <TouchableOpacity className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-4">
-            <Text className="text-center uppercase text-slate-200 font-bold text-lg">
+          <TouchableOpacity className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-20">
+            <Text className="text-center uppercase text-light font-extrabold text-xl">
               Start Build
             </Text>
           </TouchableOpacity>
           {/* Todo Desc */}
 
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            {/* Reference */}
-            <ScrollView
-              horizontal
-              nestedScrollEnabled
-              showsHorizontalScrollIndicator={false}
-              className="px-10 my-4"
-            >
-              {product.properties.item3D?.files &&
-                Object.values(product.properties.item3D.files).map((file, index) => (
+          {/* Reference */}
+          <BottomSheetScrollView
+            horizontal
+            nestedScrollEnabled
+            showsHorizontalScrollIndicator={false}
+            className="px-10 my-4"
+          >
+            {product.properties.item3D?.files &&
+              Object.values(product.properties.item3D.files).map(
+                (file, index) => (
                   <View key={index} className="items-center mx-2">
-                    <Ionicons name="file-tray-full" size={20} color="green" />
-                    <Text className="text-green-300">{file as string}</Text>
+                    <Ionicons
+                      className="p-5"
+                      name="file-tray-full"
+                      size={40}
+                      color="green"
+                    />
+                    <Text className="">{file}</Text>
                   </View>
-                ))
-              }
-
-
-
-            </ScrollView>
-          </GestureHandlerRootView>
+                )
+              )}
+          </BottomSheetScrollView>
 
           {/* Images */}
-          <ScrollView horizontal >
-            {product.properties.image.map((item) => (
+          <BottomSheetScrollView
+            horizontal
+            nestedScrollEnabled
+            showsHorizontalScrollIndicator={false}
+            className="px-10 my-6"
+            contentContainerStyle={{ gap: 16 }}
+          >
+            {product.properties.image.map((img, index) => (
               <Image
-                source={item as any}
-                className="w-6 h-6"
-                resizeMode="contain"
+                key={index}
+                source={{
+                  uri: img,
+                }}
+                className="size-40 rounded-xl"
+                resizeMode="cover"
               />
-
             ))}
-          </ScrollView>
+          </BottomSheetScrollView>
 
           {/* Other Products */}
-          <ForUContainer
-            sectionTitle="Other Products"
-            route="other"
+          <ProductList
+            catalogName="Other Products"
+            href="other"
             items={checkFilter}
-            _id={id}
+            catalogId={id}
+            mainColor="text-black"
+            useBottomSheetScroll
           />
         </ScrollView>
       </BottomSheetScrollView>
@@ -149,21 +161,21 @@ function BottomSheetContent({ product, checkFilter, id }: { product: CatalogItem
   );
 }
 
-
 export default function Detail() {
-  const { category, id } = useLocalSearchParams<{
-    category: string;
+  const { catalog, id } = useLocalSearchParams<{
+    catalog: string;
     id: string;
   }>();
   const { items, loading } = useCatalog();
 
-  const product = items.find((item) => item._id === id) // find item 
-  const checkFilter = items.filter((item) => item.typeId === product?.typeId && item._id !== product._id) // find item 
+  const product = items.find((item) => item._id === id); // find item
+  const checkFilter = items.filter(
+    (item) => item.typeId === product?.typeId && item._id !== product._id
+  ); // find item
 
   const router = useRouter();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["50%", "100%"], []);
-
 
   if (!product) {
     return (
@@ -173,16 +185,14 @@ export default function Detail() {
     );
   }
 
-
   return (
-    <SafeAreaView className="flex-1 bg-black">
+    <SafeAreaView className="flex-1 bg-white">
       {/* Background */}
       <Image
         source={{ uri: product.properties.product?.item3D.files?.poster }}
         className="absolute w-full h-full"
         resizeMode="cover"
       />
-
 
       {/* Nút back */}
       <TouchableOpacity
@@ -192,7 +202,6 @@ export default function Detail() {
         <Ionicons name="chevron-back" size={24} color="black" />
       </TouchableOpacity>
 
-
       {/* Bottom Sheet */}
       <BottomSheet
         ref={bottomSheetRef}
@@ -200,25 +209,12 @@ export default function Detail() {
         snapPoints={snapPoints}
         backgroundStyle={{ borderTopLeftRadius: 30, borderTopRightRadius: 30 }}
       >
-        <BottomSheetContent product={product} checkFilter={checkFilter} id={id} />
+        <BottomSheetContent
+          product={product}
+          checkFilter={checkFilter}
+          id={id}
+        />
       </BottomSheet>
     </SafeAreaView>
   );
 }
-
-
-const styles = StyleSheet.create({
-  header: {
-    position: "absolute", // cố định header
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#ddd",
-    padding: 12,
-  },
-  title: {
-    fontWeight: "bold",
-  },
-});
