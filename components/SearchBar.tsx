@@ -1,64 +1,87 @@
-import { searchItems } from "@/Service/itemService";
+import { useCatalog } from "@/hooks/useCatalog";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
-import { MagnifyingGlassIcon, QrCodeIcon } from "react-native-heroicons/outline";
+import {
+  MagnifyingGlassIcon,
+  QrCodeIcon,
+} from "react-native-heroicons/outline";
 
 interface SearchBarProps {
     onSearchResults?: (results: any[]) => void;
 }
 
 export default function SearchBar({ onSearchResults }: SearchBarProps) {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [isSearching, setIsSearching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const { items } = useCatalog();
 
-    const handleSearch = async () => {
-        if (!searchQuery.trim()) return;
+  const handleSearch = async () => {};
 
-        try {
-            setIsSearching(true);
-            const results = await searchItems(searchQuery);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 500);
 
-            if (onSearchResults) {
-                onSearchResults(results);
-            } else {
-                // Navigate to search results page
-                router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
-            }
-        } catch (error) {
-            console.error("Search failed:", error);
-        } finally {
-            setIsSearching(false);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
+  useEffect(() => {
+    try {
+      setIsSearching(true);
+      const results = items.filter((item) =>
+        item.properties.product?.item3D.name.toLowerCase().includes(searchQuery)
+      );
+
+      if (onSearchResults) {
+        if (!searchQuery.trim()) {
+          onSearchResults([]);
+        } else if (results.length === 0) {
+          onSearchResults([]);
+        } else {
+          onSearchResults(results);
         }
-    };
+      } else {
+        // Navigate to search results page
+        router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      }
+    } catch (error) {
+      console.error("Search failed:", error);
+    } finally {
+      setIsSearching(false);
+    }
+  }, [debouncedQuery]);
 
-    const handleSubmit = () => {
-        handleSearch();
-    };
+  const handleSubmit = () => {
+    handleSearch();
+  };
 
-    return (
-        <View className="flex-row items-center bg-gray-100 rounded-full px-3 py-2 shadow-sm mb-4">
-            {/* Icon Search */}
-            <TouchableOpacity onPress={handleSearch} disabled={isSearching}>
-                <MagnifyingGlassIcon size={20} color={isSearching ? "#ccc" : "gray"} />
-            </TouchableOpacity>
+  return (
+    <View className="flex-row items-center bg-gray-100 rounded-full px-3 py-2 shadow-lg mb-4">
+      {/* Icon Search */}
+      <TouchableOpacity onPress={handleSearch} disabled={isSearching}>
+        <MagnifyingGlassIcon size={20} color={isSearching ? "#ccc" : "gray"} />
+      </TouchableOpacity>
 
-            {/* Input */}
-            <TextInput
-                placeholder="Search products..."
-                placeholderTextColor="gray"
-                className="flex-1 px-2 text-base text-gray-700"
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                onSubmitEditing={handleSubmit}
-                returnKeyType="search"
-                editable={!isSearching}
-            />
+      {/* Input */}
+      <TextInput
+        placeholder="Search products..."
+        placeholderTextColor="gray"
+        className="flex-1 px-2 text-base text-gray-700"
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        onSubmitEditing={handleSubmit}
+        returnKeyType="search"
+        editable={!isSearching}
+      />
 
-            {/* Icon QR Code */}
-            <TouchableOpacity>
-                <QrCodeIcon size={22} color="gray" />
-            </TouchableOpacity>
-        </View>
-    );
+      {/* Icon QR Code */}
+      <TouchableOpacity>
+        <QrCodeIcon size={22} color="gray" />
+      </TouchableOpacity>
+    </View>
+  );
 }

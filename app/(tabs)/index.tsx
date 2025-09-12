@@ -1,30 +1,14 @@
-import { getType } from "@/api/apiClient";
 import ProductList from "@/components/ProductList";
 import { images } from "@/constants/images";
 import { useCatalog } from "@/hooks/useCatalog";
-import { CatalogType } from "@/types/catalog";
-import { useEffect, useMemo, useState } from "react";
-import { Image, ImageBackground, ScrollView, Text, View } from "react-native";
+import { useMemo, useState } from "react";
+import { ActivityIndicator, Image, ImageBackground, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
-  const { items, loading } = useCatalog();
+  const { items, catalogs, loading } = useCatalog();
   // State xác định sticky header
   const [isSticky, setIsSticky] = useState(false);
-  const [catalogs, setCatalog] = useState([] as CatalogType[]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getType(); // payload mẫu
-        setCatalog(data);
-      } catch (error) {
-        console.error("Failed to fetch type:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   // memorize catalogItem
   const catalogItemsMap = useMemo(() => {
     const map: Record<string, typeof items> = {};
@@ -40,6 +24,16 @@ export default function Index() {
     const y = event.nativeEvent.contentOffset.y;
     setIsSticky(y > 80); // khi cuộn xuống quá 80px thì stick header
   };
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="green" />
+        <Text>Đang tải dữ liệu...</Text>
+      </View>
+    );
+  }
+
   return (
     <View className="flex-1">
       {/* Background */}
@@ -72,7 +66,7 @@ export default function Index() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 20, paddingTop: 50 }}
         >
-                    {/* Product Sections */}
+          {/* Product Sections */}
           {catalogs.map((catalog) => (
             <ProductList
               key={catalog._id}

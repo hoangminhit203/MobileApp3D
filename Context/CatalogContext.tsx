@@ -1,43 +1,48 @@
-
+import { getType } from "@/api/apiClient";
 import { getAllCatalog } from "@/api/catelogApi";
-import { CatalogItem } from "@/types/catalog";
+import { CatalogItem, CatalogType } from "@/types/catalog";
 import React, { createContext, useEffect, useState } from "react";
 
 type CatalogContextType = {
-    items: CatalogItem[];
-    loading: boolean;
-    refresh: () => Promise<void>;
+  items: CatalogItem[];
+  catalogs: CatalogType[];
+  loading: boolean;
 };
 
-export const CatalogContext = createContext<CatalogContextType | undefined>(undefined);
+export const CatalogContext = createContext<CatalogContextType | undefined>(
+  undefined
+);
 
-export const CatalogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [items, setItems] = useState<CatalogItem[]>([]);
-    const [loading, setLoading] = useState(true);
+export const CatalogProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [items, setItems] = useState<CatalogItem[]>([]);
+  const [catalogs, setCatalog] = useState([] as CatalogType[]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
     const fetchData = async () => {
-        try {
-            setLoading(true);
-            const data = await getAllCatalog(); // gọi API
-            setItems(data);
-        } catch (err) {
-            console.error("Failed to fetch catalog items", err);
-        } finally {
-            setLoading(false);
-        }
+      try {
+        setLoading(true);
+        const [itemsData, catalogsData] = await Promise.all([
+          getAllCatalog(),
+          getType(),
+        ]);
+        setItems(itemsData);
+        setCatalog(catalogsData);
+      } catch (err) {
+        console.error("Failed to fetch data", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    fetchData();
+  }, []);
 
-    return (
-        <CatalogContext.Provider value={{ items, loading, refresh: fetchData }}>
-            {children}
-        </CatalogContext.Provider>
-    );
+  return (
+    <CatalogContext.Provider value={{ items, loading, catalogs }}>
+      {children}
+    </CatalogContext.Provider>
+  );
 };
-
-
-
-
