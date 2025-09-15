@@ -17,6 +17,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Model3dDetails = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
+    console.log('=== Model3D Component Debug ===');
+    console.log('URL param id:', id);
+    console.log('URL param id type:', typeof id);
+
     const { items, loading } = useCatalog();
     const router = useRouter();
 
@@ -28,7 +32,7 @@ const Model3dDetails = () => {
     } = useInstructions(id);
     const [currentStep, setCurrentStep] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [showInstructions, setShowInstructions] = useState(false);
+    const [showInstructions, setShowInstructions] = useState(true); // Mặc định hiển thị
 
     const cameraControlRef = useRef<any>(null);
 
@@ -49,7 +53,21 @@ const Model3dDetails = () => {
         }
     }, [hasInstructions, instructionsLoading]);
 
+    // Debug logging
+    console.log('Model3D Debug:', {
+        hasInstructions,
+        instructionsLoading,
+        showInstructions,
+        stepsLength: steps.length,
+        instructionsError
+    });
+
     const product = items.find((item) => item._id === id);
+    console.log('Found product:', product ? 'YES' : 'NO');
+    console.log('Items count:', items.length);
+    if (items.length > 0) {
+        console.log('First item ID for reference:', items[0]._id);
+    }
 
     const handleCameraChange = (camera: {
         cameraOrbit: string;
@@ -89,7 +107,7 @@ const Model3dDetails = () => {
         return (
             <SafeAreaView className="flex-1 justify-center items-center bg-gray-100">
                 <ActivityIndicator size="large" color="green" />
-                <Text className="mt-4 text-lg">Đang tải model 3D...</Text>
+                <Text className="mt-4 text-lg">Loading Model 3D...</Text>
             </SafeAreaView>
         );
     }
@@ -98,13 +116,13 @@ const Model3dDetails = () => {
         return (
             <SafeAreaView className="flex-1 justify-center items-center bg-gray-100">
                 <Text className="text-gray-500 text-lg">
-                    Không tìm thấy sản phẩm
+                    Not Found Model 3D
                 </Text>
                 <TouchableOpacity
                     onPress={() => router.back()}
                     className="mt-4 bg-green-600 py-2 px-6 rounded-lg"
                 >
-                    <Text className="text-white font-bold">Quay lại</Text>
+                    <Text className="text-white font-bold">Back</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         );
@@ -152,7 +170,7 @@ const Model3dDetails = () => {
                 </View>
 
                 {/* Instructions dưới */}
-                {showInstructions && hasInstructions && (
+                {showInstructions && hasInstructions && steps.length > 0 && (
                     <View style={{ height: 160, backgroundColor: "white" }}>
                         <InstructionsBar
                             steps={steps}
