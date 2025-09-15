@@ -24,9 +24,9 @@ export const CatalogProvider: React.FC<{ children: React.ReactNode }> = ({
     const fetchData = async () => {
       try {
         setLoading(true);
-       const loginRes = await getLoginUser();
-      console.log("Login response:", loginRes);
-      
+        const loginRes = await getLoginUser();
+        console.log("Login response:", loginRes);
+
         const [itemsData, catalogsData] = await Promise.all([
           getAllCatalog(),
           getType(),

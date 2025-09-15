@@ -8,7 +8,7 @@ import {
 } from "react-native-heroicons/outline";
 
 interface SearchBarProps {
-    onSearchResults?: (results: any[]) => void;
+  onSearchResults?: (results: any[]) => void;
 }
 
 export default function SearchBar({ onSearchResults }: SearchBarProps) {
@@ -17,7 +17,7 @@ export default function SearchBar({ onSearchResults }: SearchBarProps) {
   const [isSearching, setIsSearching] = useState(false);
   const { items } = useCatalog();
 
-  const handleSearch = async () => {};
+  const handleSearch = async () => { };
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -32,8 +32,7 @@ export default function SearchBar({ onSearchResults }: SearchBarProps) {
   useEffect(() => {
     try {
       setIsSearching(true);
-      const results = items.filter((item) =>
-        item.properties.product?.item3D.name.toLowerCase().includes(searchQuery)
+      const results = items.filter((item) => item.properties.product?.item3D.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
       if (onSearchResults) {

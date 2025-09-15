@@ -111,7 +111,7 @@ function BottomSheetContent({
 
             {/* Button */}
             <TouchableOpacity
-              onPress={() => router.push(`/model3d/page?id=${id}`)}
+              onPress={() => router.push(`/model3d/${id}` as any)}
               className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-20"
             >
               <Text className="text-center uppercase text-light font-extrabold text-xl">

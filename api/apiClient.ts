@@ -1,7 +1,7 @@
 import { CatalogType } from "@/types/catalog";
 
 const jwt =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU1OTBlNGFlNTY4OWE0ODVjMjVlMzEiLCJlbWFpbCI6InByb3JvY2ttYW4xMTNAZ21haWwuY29tIiwiaWF0IjoxNzU3NzAxNTA0LCJleHAiOjE3NTc3NDQ3MDR9.BFzmrGe7we9ROSyFstkEv7W__6xcnbK5Xr3VINfngIE";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU1OTBlNGFlNTY4OWE0ODVjMjVlMzEiLCJlbWFpbCI6InByb3JvY2ttYW4xMTNAZ21haWwuY29tIiwiaWF0IjoxNzU3OTA2MzYxLCJleHAiOjE3NTc5NDk1NjF9.e028WctUmdcIPcGEezDGQh5QbaYw4aiidLlnN8mZgrY";
 
 export const fetchAllItems = async () => {
     const res = await fetch("http://35.238.30.208:58203/catalog/items/all", {
@@ -59,6 +59,29 @@ export const getLoginUser = async () => {
 };
 
 
+
+export const fetchItemById = async (itemId: string) => {
+    const res = await fetch(`http://35.238.30.208:58203/catalog/items/${itemId}`, {
+        headers: {
+            "x-testing-header": 'true',
+            Authorization: `Bearer ${jwt}`,
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (!res.ok) {
+        let errMessage = `HTTP error ${res.status}`;
+        try {
+            const errData = await res.json();
+            errMessage = errData?.message || errMessage;
+        } catch (e) {
+            // fallback nếu res không phải JSON
+        }
+        throw new Error(errMessage);
+    }
+
+    return res.json();
+};
 
 export const getType = async (): Promise<CatalogType[]> => {
     try {

@@ -8,12 +8,12 @@ import { CatalogItem, CatalogType } from "@/types/catalog";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
-    ActivityIndicator,
-    Dimensions,
-    Image,
-    ScrollView,
-    Text,
-    View,
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  ScrollView,
+  Text,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -37,12 +37,11 @@ export default function Index() {
       });
     }
   };
-
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="green" />
-        <Text>Đang tải dữ liệu...</Text>
+        <Text>Loading...</Text>
       </View>
     );
   }
