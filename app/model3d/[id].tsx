@@ -46,7 +46,7 @@ const Model3dDetails = () => {
                 </TouchableOpacity>
 
                 <Text className="text-white text-lg font-bold flex-1 text-center mx-4" numberOfLines={1}>
-                    {product.name}
+                    {product.properties.product?.item3D.name}
                 </Text>
 
                 <View className="w-10" />

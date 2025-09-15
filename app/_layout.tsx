@@ -18,7 +18,7 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
-          name="model3d/page"
+          name="model3d/[id]"
           options={{
             headerShown: false,
           }}
