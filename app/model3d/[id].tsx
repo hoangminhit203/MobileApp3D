@@ -1,10 +1,18 @@
+import InstructionsBar from "@/components/InstructionPanel/InstructionsBar";
 import ThreeScene from "@/components/threeScene/step/threeeScene";
 import { useCatalog } from "@/hooks/useCatalog";
+import { useInstructions } from "@/hooks/useInstructions";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { useEffect } from "react";
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { BookOpen } from "lucide-react-native";
+import { useEffect, useRef, useState } from "react";
+import {
+    ActivityIndicator,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Model3dDetails = () => {
@@ -12,12 +20,22 @@ const Model3dDetails = () => {
     const { items, loading } = useCatalog();
     const router = useRouter();
 
-    // 👉 Lock ngang khi vào, về dọc khi thoát
+    const {
+        steps,
+        loading: instructionsLoading,
+        error: instructionsError,
+        hasInstructions,
+    } = useInstructions(id);
+    const [currentStep, setCurrentStep] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [showInstructions, setShowInstructions] = useState(false);
+
+    const cameraControlRef = useRef<any>(null);
+
     useEffect(() => {
         ScreenOrientation.lockAsync(
             ScreenOrientation.OrientationLock.LANDSCAPE
         );
-
         return () => {
             ScreenOrientation.lockAsync(
                 ScreenOrientation.OrientationLock.PORTRAIT_UP
@@ -25,9 +43,49 @@ const Model3dDetails = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (hasInstructions && !instructionsLoading) {
+            setShowInstructions(true);
+        }
+    }, [hasInstructions, instructionsLoading]);
+
     const product = items.find((item) => item._id === id);
 
-    if (loading) {
+    const handleCameraChange = (camera: {
+        cameraOrbit: string;
+        fieldOfView: string;
+        target: string;
+    }) => {
+        if (cameraControlRef.current) {
+            cameraControlRef.current.updateCamera(camera);
+        }
+    };
+
+    const handleCameraControlReady = (controller: any) => {
+        cameraControlRef.current = controller;
+    };
+
+    const handleStepChange = (stepIndex: number) => {
+        setCurrentStep(stepIndex);
+        setIsPlaying(false);
+    };
+
+    const handlePlayPause = () => {
+        setIsPlaying(!isPlaying);
+
+        if (!isPlaying && steps[currentStep]?.time) {
+            const duration = parseFloat(steps[currentStep].time || "0") * 1000;
+            setTimeout(() => {
+                if (currentStep < steps.length - 1) {
+                    setCurrentStep(currentStep + 1);
+                } else {
+                    setIsPlaying(false);
+                }
+            }, duration);
+        }
+    };
+
+    if (loading || instructionsLoading) {
         return (
             <SafeAreaView className="flex-1 justify-center items-center bg-gray-100">
                 <ActivityIndicator size="large" color="green" />
@@ -39,7 +97,9 @@ const Model3dDetails = () => {
     if (!product) {
         return (
             <SafeAreaView className="flex-1 justify-center items-center bg-gray-100">
-                <Text className="text-gray-500 text-lg">Không tìm thấy sản phẩm</Text>
+                <Text className="text-gray-500 text-lg">
+                    Không tìm thấy sản phẩm
+                </Text>
                 <TouchableOpacity
                     onPress={() => router.back()}
                     className="mt-4 bg-green-600 py-2 px-6 rounded-lg"
@@ -68,22 +128,42 @@ const Model3dDetails = () => {
                     {product.properties.product?.item3D.name}
                 </Text>
 
-                <View className="w-10" />
+                {hasInstructions ? (
+                    <TouchableOpacity
+                        onPress={() => setShowInstructions(!showInstructions)}
+                        className="bg-white/20 p-2 rounded-full"
+                    >
+                        <BookOpen size={24} color="white" />
+                    </TouchableOpacity>
+                ) : (
+                    <View className="w-10" />
+                )}
             </View>
 
-            {/* 3D Model Viewer */}
-            <View className="flex-1">
-                <ThreeScene
-                    itemId={id}
-                    enableDebug={__DEV__}
-                />
-            </View>
+            {/* Main Content */}
+            <View className="flex-1 flex-col">
+                {/* 3D Model */}
+                <View style={{ flex: 1 }}>
+                    <ThreeScene
+                        itemId={id}
+                        enableDebug={__DEV__}
+                        onCameraControlReady={handleCameraControlReady}
+                    />
+                </View>
 
-            {/* Bottom Controls */}
-            <View className="p-4 bg-white/10">
-                <Text className="text-white text-center text-sm opacity-75">
-                    Vuốt để xoay • Chụm để phóng to/thu nhỏ
-                </Text>
+                {/* Instructions dưới */}
+                {showInstructions && hasInstructions && (
+                    <View style={{ height: 160, backgroundColor: "white" }}>
+                        <InstructionsBar
+                            steps={steps}
+                            currentStep={currentStep}
+                            onStepChange={handleStepChange}
+                            onCameraChange={handleCameraChange}
+                            isPlaying={isPlaying}
+                            onPlayPause={handlePlayPause}
+                        />
+                    </View>
+                )}
             </View>
         </SafeAreaView>
     );

@@ -17,8 +17,11 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const { width } = Dimensions.get("window");
-const cardWidth = (width - 16 * 2 - 12) / 2;
+// Move Dimensions usage inside the component to avoid initialization issues
+const getCardWidth = () => {
+  const { width } = Dimensions.get("window");
+  return (width - 16 * 2 - 12) / 2;
+};
 // width màn hình - padding ngang - khoảng cách giữa 2 card
 
 export default function Index() {

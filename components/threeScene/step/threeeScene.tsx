@@ -44,11 +44,63 @@ function fitModelToView(model: THREE.Object3D, camera: THREE.Camera, controls?: 
 }
 
 // ===== Component Model =====
-const Model = ({ url }: { url: string }) => {
+const Model = ({ url, onCameraControlReady }: { url: string; onCameraControlReady?: (controller: any) => void }) => {
     const { scene } = useGLTF(url);
     const modelRef = useRef<THREE.Group>(null);
     const { camera } = useThree();
     const controlsRef = useRef<any>(null);
+
+    // Create camera controller
+    const cameraController = useRef({
+        updateCamera: (cameraData: {
+            cameraOrbit: string;
+            fieldOfView: string;
+            target: string;
+        }) => {
+            try {
+                // Parse camera orbit (e.g., "335.76deg 61.04deg 0.25m")
+                const orbitParts = cameraData.cameraOrbit.split(' ');
+                if (orbitParts.length === 3) {
+                    const azimuth = parseFloat(orbitParts[0].replace('deg', '')) * (Math.PI / 180);
+                    const polar = parseFloat(orbitParts[1].replace('deg', '')) * (Math.PI / 180);
+                    const radius = parseFloat(orbitParts[2].replace('m', ''));
+
+                    // Parse target position
+                    const targetParts = cameraData.target.split(' ');
+                    const target = new THREE.Vector3(
+                        parseFloat(targetParts[0]?.replace('m', '') || '0'),
+                        parseFloat(targetParts[1]?.replace('m', '') || '0'),
+                        parseFloat(targetParts[2]?.replace('m', '') || '0')
+                    );
+
+                    // Calculate new camera position
+                    const x = target.x + radius * Math.sin(polar) * Math.cos(azimuth);
+                    const y = target.y + radius * Math.cos(polar);
+                    const z = target.z + radius * Math.sin(polar) * Math.sin(azimuth);
+
+                    // Update camera
+                    if (camera instanceof THREE.PerspectiveCamera) {
+                        const fov = parseFloat(cameraData.fieldOfView.replace('deg', ''));
+                        camera.fov = fov;
+                        camera.updateProjectionMatrix();
+                    }
+
+                    camera.position.set(x, y, z);
+                    camera.lookAt(target);
+
+                    // Update controls
+                    if (controlsRef.current) {
+                        controlsRef.current.target.copy(target);
+                        controlsRef.current.update();
+                    }
+
+                    console.log('Camera updated to:', { position: { x, y, z }, target, fov: cameraData.fieldOfView });
+                }
+            } catch (error) {
+                console.error('Failed to update camera:', error);
+            }
+        }
+    });
 
     useEffect(() => {
         if (modelRef.current && scene) {
@@ -62,6 +114,13 @@ const Model = ({ url }: { url: string }) => {
             fitModelToView(modelRef.current, camera, controlsRef.current);
         }
     }, [scene]);
+
+    // Expose camera controller
+    useEffect(() => {
+        if (onCameraControlReady) {
+            onCameraControlReady(cameraController.current);
+        }
+    }, [onCameraControlReady]);
 
     return (
         <>
@@ -90,7 +149,17 @@ const ModelLoader = () => (
 );
 
 // ===== ThreeScene chính =====
-const ThreeScene = ({ itemId, glbUrl, enableDebug = false }: { itemId?: string; glbUrl?: string; enableDebug?: boolean }) => {
+const ThreeScene = ({
+    itemId,
+    glbUrl,
+    enableDebug = false,
+    onCameraControlReady
+}: {
+    itemId?: string;
+    glbUrl?: string;
+    enableDebug?: boolean;
+    onCameraControlReady?: (controller: any) => void;
+}) => {
     const { modelUrl, loading, error } = use3DModel(itemId, glbUrl, enableDebug);
 
     if (loading) {
@@ -171,7 +240,7 @@ const ThreeScene = ({ itemId, glbUrl, enableDebug = false }: { itemId?: string; 
 
                 {/* Model */}
                 <Suspense fallback={<ModelLoader />}>
-                    <Model url={modelUrl} />
+                    <Model url={modelUrl} onCameraControlReady={onCameraControlReady} />
                 </Suspense>
             </Canvas>
         </View>
