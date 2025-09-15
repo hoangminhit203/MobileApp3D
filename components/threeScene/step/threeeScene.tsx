@@ -17,9 +17,9 @@ function fitModelToView(model: THREE.Object3D, camera: THREE.Camera, controls?: 
     // Căn giữa model
     model.position.set(-center.x, -center.y, -center.z);
 
-    // Tính scale để vừa khung hình
+    // Tăng scale để model to hơn (từ 6 lên 10)
     const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = maxDim > 0 ? 2 / maxDim : 1;
+    const scale = maxDim > 0 ? 10 / maxDim : 1.5;
     model.scale.setScalar(scale);
 
     // Fit camera dựa theo kích thước model (chỉ cho PerspectiveCamera)
@@ -27,11 +27,11 @@ function fitModelToView(model: THREE.Object3D, camera: THREE.Camera, controls?: 
         const fov = camera.fov * (Math.PI / 180);
         let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
 
-        // Đặt camera xa gấp đôi để model không bị cắt
-        camera.position.set(center.x, center.y, cameraZ * 2);
+        // Đặt camera ở vị trí xoay ngang, xa hơn để model không bị cắt
+        camera.position.set(cameraZ * 2.5, center.y, center.z);
     } else {
-        // Fallback cho camera khác
-        camera.position.set(0, 0, 10);
+        // Fallback cho camera khác - vị trí xoay ngang
+        camera.position.set(12, 2, 0);
     }
 
     camera.lookAt(0, 0, 0);
@@ -73,8 +73,9 @@ const Model = ({ url }: { url: string }) => {
                 enableRotate
                 enableDamping
                 dampingFactor={0.05}
-                minDistance={2}
-                maxDistance={50}
+                minDistance={5} // Tăng khoảng cách tối thiểu
+                maxDistance={80} // Tăng khoảng cách tối đa
+                target={[0, 0, 0]} // Đảm bảo controls nhìn vào trung tâm
             />
         </>
     );
@@ -122,8 +123,8 @@ const ThreeScene = ({ itemId, glbUrl, enableDebug = false }: { itemId?: string; 
             <Canvas
                 style={{ flex: 1 }}
                 camera={{
-                    position: [0, 0, 10],
-                    fov: 45,
+                    position: [15, 2, 0], // Camera xoay ngang, nhìn từ bên phải
+                    fov: 50, // Tăng FOV để thấy rõ model to hơn
                     near: 0.1,
                     far: 1000,
                 }}

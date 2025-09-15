@@ -2,12 +2,28 @@ import ThreeScene from "@/components/threeScene/step/threeeScene";
 import { useCatalog } from "@/hooks/useCatalog";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { useEffect } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
+
 const Model3dDetails = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
     const { items, loading } = useCatalog();
     const router = useRouter();
+
+    // 👉 Lock ngang khi vào, về dọc khi thoát
+    useEffect(() => {
+        ScreenOrientation.lockAsync(
+            ScreenOrientation.OrientationLock.LANDSCAPE
+        );
+
+        return () => {
+            ScreenOrientation.lockAsync(
+                ScreenOrientation.OrientationLock.PORTRAIT_UP
+            );
+        };
+    }, []);
 
     const product = items.find((item) => item._id === id);
 
@@ -45,7 +61,10 @@ const Model3dDetails = () => {
                     <Ionicons name="chevron-back" size={24} color="white" />
                 </TouchableOpacity>
 
-                <Text className="text-white text-lg font-bold flex-1 text-center mx-4" numberOfLines={1}>
+                <Text
+                    className="text-white text-lg font-bold flex-1 text-center mx-4"
+                    numberOfLines={1}
+                >
                     {product.properties.product?.item3D.name}
                 </Text>
 
@@ -63,7 +82,7 @@ const Model3dDetails = () => {
             {/* Bottom Controls */}
             <View className="p-4 bg-white/10">
                 <Text className="text-white text-center text-sm opacity-75">
-                    Vuốt để xoay • Chụm để phông to/thu nhỏ
+                    Vuốt để xoay • Chụm để phóng to/thu nhỏ
                 </Text>
             </View>
         </SafeAreaView>
