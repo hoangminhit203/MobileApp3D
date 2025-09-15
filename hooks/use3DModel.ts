@@ -63,13 +63,13 @@ export const use3DModel = (itemId?: string, fallbackUrl?: string, enableDebug?: 
                 setItemData(data);
 
                 // Debug logging nếu được enable
-                if (enableDebug) {
-                    console.log('=== DEBUG ITEM STRUCTURE ===');
-                    console.log('Item ID:', data._id);
-                    console.log('Item Name:', data.name);
-                    console.log('Full structure:', JSON.stringify(data.properties, null, 2));
-                    console.log('=== END DEBUG ===');
-                }                // Sử dụng helper function để extract GLB URL
+                // if (enableDebug) {
+                //     console.log('=== DEBUG ITEM STRUCTURE ===');
+                //     console.log('Item ID:', data._id);
+                //     console.log('Item Name:', data.name);
+                //     console.log('Full structure:', JSON.stringify(data.properties, null, 2));
+                //     console.log('=== END DEBUG ===');
+                // }                // Sử dụng helper function để extract GLB URL
                 const glbUrl = extractGlbUrl(data);
 
                 if (glbUrl) {

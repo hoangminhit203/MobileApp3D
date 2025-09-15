@@ -68,6 +68,11 @@ const Model3dDetails = () => {
     const handleStepChange = (stepIndex: number) => {
         setCurrentStep(stepIndex);
         setIsPlaying(false);
+
+        // Chuyển camera theo step khi bấm Next/Previous
+        if (steps[stepIndex]?.camera) {
+            handleCameraChange(steps[stepIndex].camera);
+        }
     };
 
     const handlePlayPause = () => {

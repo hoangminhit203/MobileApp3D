@@ -43,17 +43,15 @@ export default function Index() {
         {/* Header */}
         <ImageBackground
           source={isSticky ? images.bg : null} // hình khi sticky
-          className={` ${
-            isSticky
+          className={` ${isSticky
               ? "absolute top-0 left-0 right-0 z-10 pt-10"
               : "relative pt-16"
-          }`}
+            }`}
           resizeMode="cover"
         >
           <Text
-            className={`uppercase font-extrabold text-light ${
-              isSticky ? "text-2xl text-center py-3" : "text-4xl"
-            }`}
+            className={`uppercase font-extrabold text-light ${isSticky ? "text-2xl text-center py-3" : "text-4xl"
+              }`}
           >
             For You
           </Text>

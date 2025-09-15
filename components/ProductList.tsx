@@ -36,7 +36,7 @@ const ProductList: React.FC<Props> = ({
         <Link
           className={`text-sm ${mainColor}`}
           href={{
-            pathname: "/[catalog]" as any ,
+            pathname: "/[catalog]" as any,
             params: { catalog: href, catalogId },
           }}
         >
@@ -48,7 +48,7 @@ const ProductList: React.FC<Props> = ({
       {items.length === 0 ? (
         <View className="py-6">
           <Text className="text-light text-center text-md italic">
-            Không có sản phẩm nào
+            No products available
           </Text>
         </View>
       ) : (

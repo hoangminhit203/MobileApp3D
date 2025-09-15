@@ -19,7 +19,7 @@ function fitModelToView(model: THREE.Object3D, camera: THREE.Camera, controls?: 
 
     // Tăng scale để model to hơn (từ 6 lên 10)
     const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = maxDim > 0 ? 10 / maxDim : 1.5;
+    const scale = maxDim > 0 ? 6 / maxDim : 1.5;
     model.scale.setScalar(scale);
 
     // Fit camera dựa theo kích thước model (chỉ cho PerspectiveCamera)
@@ -31,7 +31,7 @@ function fitModelToView(model: THREE.Object3D, camera: THREE.Camera, controls?: 
         camera.position.set(cameraZ * 2.5, center.y, center.z);
     } else {
         // Fallback cho camera khác - vị trí xoay ngang
-        camera.position.set(12, 2, 0);
+        camera.position.set(10, 2, 0);
     }
 
     camera.lookAt(0, 0, 0);
@@ -182,7 +182,7 @@ const ThreeScene = ({
     if (!modelUrl) {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Không có 3D model để hiển thị</Text>
+                <Text>No 3D model to display</Text>
             </View>
         );
     }
@@ -192,7 +192,7 @@ const ThreeScene = ({
             <Canvas
                 style={{ flex: 1 }}
                 camera={{
-                    position: [15, 2, 0], // Camera xoay ngang, nhìn từ bên phải
+                    position: [12, 2, 1], // Camera xoay ngang, nhìn từ bên phải
                     fov: 50, // Tăng FOV để thấy rõ model to hơn
                     near: 0.1,
                     far: 1000,
