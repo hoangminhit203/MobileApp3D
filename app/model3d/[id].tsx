@@ -17,29 +17,24 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Model3dDetails = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
-    console.log('=== Model3D Component Debug ===');
-    console.log('URL param id:', id);
-    console.log('URL param id type:', typeof id);
-
     const { items, loading } = useCatalog();
     const router = useRouter();
 
     const {
         steps,
         loading: instructionsLoading,
-        error: instructionsError,
         hasInstructions,
     } = useInstructions(id);
+
     const [currentStep, setCurrentStep] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [showInstructions, setShowInstructions] = useState(true); // Mặc định hiển thị
+    const [showInstructions, setShowInstructions] = useState(true);
 
     const cameraControlRef = useRef<any>(null);
 
+    // Lock orientation sang landscape khi vào màn hình
     useEffect(() => {
-        ScreenOrientation.lockAsync(
-            ScreenOrientation.OrientationLock.LANDSCAPE
-        );
+        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
         return () => {
             ScreenOrientation.lockAsync(
                 ScreenOrientation.OrientationLock.PORTRAIT_UP
@@ -47,27 +42,14 @@ const Model3dDetails = () => {
         };
     }, []);
 
+    // Nếu có instructions thì auto bật panel
     useEffect(() => {
         if (hasInstructions && !instructionsLoading) {
             setShowInstructions(true);
         }
     }, [hasInstructions, instructionsLoading]);
 
-    // Debug logging
-    console.log('Model3D Debug:', {
-        hasInstructions,
-        instructionsLoading,
-        showInstructions,
-        stepsLength: steps.length,
-        instructionsError
-    });
-
     const product = items.find((item) => item._id === id);
-    console.log('Found product:', product ? 'YES' : 'NO');
-    console.log('Items count:', items.length);
-    if (items.length > 0) {
-        console.log('First item ID for reference:', items[0]._id);
-    }
 
     const handleCameraChange = (camera: {
         cameraOrbit: string;
@@ -89,13 +71,13 @@ const Model3dDetails = () => {
     };
 
     const handlePlayPause = () => {
-        setIsPlaying(!isPlaying);
+        setIsPlaying((prev) => !prev);
 
         if (!isPlaying && steps[currentStep]?.time) {
             const duration = parseFloat(steps[currentStep].time || "0") * 1000;
             setTimeout(() => {
                 if (currentStep < steps.length - 1) {
-                    setCurrentStep(currentStep + 1);
+                    setCurrentStep((prev) => prev + 1);
                 } else {
                     setIsPlaying(false);
                 }
@@ -115,9 +97,7 @@ const Model3dDetails = () => {
     if (!product) {
         return (
             <SafeAreaView className="flex-1 justify-center items-center bg-gray-100">
-                <Text className="text-gray-500 text-lg">
-                    Not Found Model 3D
-                </Text>
+                <Text className="text-gray-500 text-lg">Not Found Model 3D</Text>
                 <TouchableOpacity
                     onPress={() => router.back()}
                     className="mt-4 bg-green-600 py-2 px-6 rounded-lg"
@@ -169,9 +149,9 @@ const Model3dDetails = () => {
                     />
                 </View>
 
-                {/* Instructions dưới */}
+                {/* Instructions Panel */}
                 {showInstructions && hasInstructions && steps.length > 0 && (
-                    <View style={{ height: 160, backgroundColor: "white" }}>
+                    <View style={{ height: 80, backgroundColor: "white" }}>
                         <InstructionsBar
                             steps={steps}
                             currentStep={currentStep}

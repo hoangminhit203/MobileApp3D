@@ -22,65 +22,79 @@ const InstructionsBar = ({
     const step = steps[currentStep];
 
     return (
-        <View className="flex-1 flex-col p-4 bg-white">
-            {/* Nội dung hướng dẫn */}
-            <Text className="text-lg font-bold text-orange-600 mb-1">
-                {step?._id || `Step ${currentStep + 1}`}
-            </Text>
-            <Text className="text-gray-700 flex-1">
-                {step?.tts || "No description available."}
-            </Text>
+        // 🔽 Thu nhỏ padding trên/dưới để bar thấp hơn
+        <View className="w-full px-2 py-1 bg-white border-t border-gray-200">
+            <View className="flex-row items-center justify-between">
+                <View className="flex-1 pr-2">
+                    {/* 🔽 Giảm size chữ tiêu đề: text-base -> text-sm */}
+                    <Text className="text-sm font-bold text-orange-600">
+                        {`Step ${currentStep + 1}`}
+                    </Text>
+                    {/* 🔽 Giảm size chữ mô tả: text-sm -> text-xs và thêm leading-tight để dòng chữ dính nhau hơn */}
+                    <Text className="text-gray-700 text-lg leading-tight">
+                        {step?.tts || "No description available."}
+                    </Text>
+                </View>
 
-            {/* Thanh điều khiển */}
-            <View className="flex-row items-center justify-between mt-2">
-                {/* Nút lùi */}
-                <TouchableOpacity
-                    onPress={() =>
-                        currentStep > 0 && onStepChange(currentStep - 1)
-                    }
-                    disabled={currentStep === 0}
-                    className="p-2"
-                >
-                    <Ionicons
-                        name="chevron-back-circle"
-                        size={32}
-                        color={currentStep === 0 ? "gray" : "black"}
-                    />
-                </TouchableOpacity>
-
-                {/* Nút Play / Pause */}
-                <TouchableOpacity
-                    onPress={onPlayPause}
-                    className="p-3 bg-purple-600 rounded-full"
-                >
-                    <Ionicons
-                        name={isPlaying ? "pause" : "play"}
-                        size={28}
-                        color="white"
-                    />
-                </TouchableOpacity>
-
-                {/* Nút tới */}
-                <TouchableOpacity
-                    onPress={() =>
-                        currentStep < steps.length - 1 &&
-                        onStepChange(currentStep + 1)
-                    }
-                    disabled={currentStep === steps.length - 1}
-                    className="p-2"
-                >
-                    <Ionicons
-                        name="chevron-forward-circle"
-                        size={32}
-                        color={
-                            currentStep === steps.length - 1 ? "gray" : "black"
+                {/* Thanh điều khiển gom về bên phải */}
+                <View className="flex-row items-center space-x-1">
+                    {/* Nút lùi */}
+                    <TouchableOpacity
+                        onPress={() =>
+                            currentStep > 0 && onStepChange(currentStep - 1)
                         }
-                    />
-                </TouchableOpacity>
+                        disabled={currentStep === 0}
+                        // 🔽 Giảm padding nút: p-2 -> p-0.5
+                        className="p-0.5"
+                    >
+                        {/* 🔽 Giảm size icon: 32 -> 24 */}
+                        <Ionicons
+                            name="chevron-back-circle"
+                            size={24}
+                            color={currentStep === 0 ? "gray" : "black"}
+                        />
+                    </TouchableOpacity>
+
+                    {/* Nút Play / Pause */}
+                    <TouchableOpacity
+                        onPress={onPlayPause}
+                        // 🔽 Giảm padding nút: p-3 -> p-1
+                        className="p-1 bg-purple-600 rounded-full"
+                    >
+                        {/* 🔽 Giảm size icon: 28 -> 16 */}
+                        <Ionicons
+                            name={isPlaying ? "pause" : "play"}
+                            size={16}
+                            color="white"
+                        />
+                    </TouchableOpacity>
+
+                    {/* Nút tới */}
+                    <TouchableOpacity
+                        onPress={() =>
+                            currentStep < steps.length - 1 &&
+                            onStepChange(currentStep + 1)
+                        }
+                        disabled={currentStep === steps.length - 1}
+                        // 🔽 Giảm padding nút: p-2 -> p-0.5
+                        className="p-0.5"
+                    >
+                        {/* 🔽 Giảm size icon: 32 -> 24 */}
+                        <Ionicons
+                            name="chevron-forward-circle"
+                            size={24}
+                            color={
+                                currentStep === steps.length - 1
+                                    ? "gray"
+                                    : "black"
+                            }
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
 
-            {/* Chỉ số step */}
-            <Text className="text-center text-sm text-gray-500 mt-1">
+            {/* 🔽 Giảm size chữ step counter: text-sm -> text-[10px] */}
+            <Text className="text-right text-[10px] text-gray-500 mt-0.5">
                 {currentStep + 1}/{steps.length}
             </Text>
         </View>
