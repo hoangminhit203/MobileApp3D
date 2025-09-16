@@ -29,7 +29,7 @@ export default function Index() {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="green" />
-        <Text>Đang tải dữ liệu...</Text>
+        <Text>Loading data...</Text>
       </View>
     );
   }
@@ -44,8 +44,8 @@ export default function Index() {
         <ImageBackground
           source={isSticky ? images.bg : null} // hình khi sticky
           className={` ${isSticky
-              ? "absolute top-0 left-0 right-0 z-10 pt-10"
-              : "relative pt-16"
+            ? "absolute top-0 left-0 right-0 z-10 pt-10"
+            : "relative pt-16"
             }`}
           resizeMode="cover"
         >

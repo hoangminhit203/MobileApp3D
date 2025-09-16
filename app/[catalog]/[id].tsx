@@ -1,4 +1,5 @@
 import ProductList from "@/components/ProductList";
+import { use3DModel } from "@/hooks/use3DModel";
 import { useCatalog } from "@/hooks/useCatalog";
 import { CatalogItem } from "@/types/catalog";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,10 +8,12 @@ import BottomSheet, {
   useBottomSheetInternal,
 } from "@gorhom/bottom-sheet";
 import { router, useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   Linking,
+  Modal,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -32,6 +35,52 @@ function BottomSheetContent({
   checkFilter: CatalogItem[];
   id: string;
 }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("Preparing 3D Model...");
+
+  // Pre-load 3D model data
+  const { modelUrl, loading: modelLoading, error: modelError } = use3DModel(id);
+
+  // Handle Start Build button press with loading
+  const handleStartBuild = async () => {
+    setIsLoading(true);
+
+    try {
+      if (!modelUrl) {
+        setLoadingMessage("Loading model data...");
+        // Wait for model data to be available
+        let attempts = 0;
+        const maxAttempts = 30; // 15 seconds timeout
+
+        while (!modelUrl && attempts < maxAttempts) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          attempts++;
+        }
+
+        if (!modelUrl) {
+          throw new Error("Failed to load 3D model data");
+        }
+      }
+
+      setLoadingMessage("Optimizing 3D model...");
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      setLoadingMessage("Almost ready...");
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Navigate to 3D model page
+      router.push(`/model3d/${id}` as any);
+
+    } catch (error) {
+      console.error("Error loading 3D model:", error);
+      setLoadingMessage("Error loading model. Please try again.");
+      setTimeout(() => setIsLoading(false), 2000);
+      return;
+    }
+
+    // Reset loading state after navigation
+    setTimeout(() => setIsLoading(false), 1000);
+  };
   // Animation Style
   const { animatedIndex } = useBottomSheetInternal();
   const headerStyle = useAnimatedStyle(() => {
@@ -111,13 +160,34 @@ function BottomSheetContent({
 
             {/* Button */}
             <TouchableOpacity
-              onPress={() => router.push(`/model3d/${id}` as any)}
-              className="bg-green-400 px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-20"
+              onPress={handleStartBuild}
+              disabled={isLoading || modelLoading}
+              className={`${isLoading || modelLoading ? 'bg-gray-400' : 'bg-green-400'
+                } px-10 py-3 rounded-xl shadow-lg shadow-black mb-6 mx-20 opacity-${isLoading || modelLoading ? '70' : '100'
+                }`}
             >
-              <Text className="text-center uppercase text-light font-extrabold text-xl">
-                Start Build
-              </Text>
+              {isLoading || modelLoading ? (
+                <View className="flex-row justify-center items-center">
+                  <ActivityIndicator size="small" color="white" />
+                  <Text className="text-center uppercase text-white font-extrabold text-xl ml-2">
+                    {modelLoading ? "Loading..." : "Starting..."}
+                  </Text>
+                </View>
+              ) : (
+                <Text className="text-center uppercase text-light font-extrabold text-xl">
+                  {modelError ? "Retry" : "Start Build"}
+                </Text>
+              )}
             </TouchableOpacity>
+
+            {/* Model Status Info */}
+            {modelError && (
+              <View className="mx-20 mb-4 p-3 bg-red-100 rounded-lg">
+                <Text className="text-red-600 text-center text-sm">
+                  {modelError}
+                </Text>
+              </View>
+            )}
             {/* Todo Desc */}
 
             {/* Reference Files */}
@@ -192,6 +262,37 @@ function BottomSheetContent({
           </ScrollView>
         </BottomSheetScrollView>
       </Animated.View>
+
+      {/* Loading Modal */}
+      <Modal
+        visible={isLoading}
+        transparent
+        animationType="fade"
+      >
+        <View className="flex-1 bg-black/50 justify-center items-center">
+          <View className="bg-white p-8 rounded-2xl items-center shadow-2xl mx-8">
+            <ActivityIndicator size="large" color="green" />
+            <Text className="mt-4 text-lg font-bold text-gray-800 text-center">
+              {loadingMessage}
+            </Text>
+            <Text className="mt-2 text-sm text-gray-600 text-center">
+              Please wait while we prepare everything
+            </Text>
+
+            {/* Loading Progress Bar */}
+            <View className="w-full mt-4 bg-gray-200 rounded-full h-2">
+              <View
+                className="bg-green-400 h-2 rounded-full"
+                style={{
+                  width: loadingMessage.includes("Preparing") ? "20%" :
+                    loadingMessage.includes("Optimizing") ? "60%" :
+                      loadingMessage.includes("Almost") ? "90%" : "100%"
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
