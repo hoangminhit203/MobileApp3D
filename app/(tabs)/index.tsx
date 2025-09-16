@@ -1,67 +1,81 @@
-import FoUContainer from "@/components/FoUContainer";
-import SearchBar from "@/components/SearchBar";
+import ProductList from "@/components/ProductList";
 import { images } from "@/constants/images";
-import seed from "@/interfaces/seedData";
-import { useState } from "react";
-import { Image, ImageBackground, ScrollView, Text } from "react-native";
+import { useCatalog } from "@/hooks/useCatalog";
+import { useMemo, useState } from "react";
+import { ActivityIndicator, Image, ImageBackground, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+  const { items, catalogs, loading } = useCatalog();
   // State xác định sticky header
   const [isSticky, setIsSticky] = useState(false);
+  // memorize catalogItem
+  const catalogItemsMap = useMemo(() => {
+    const map: Record<string, typeof items> = {};
+    catalogs.forEach((catalog) => {
+      map[catalog._id] = items
+        .filter((item) => item.typeId === catalog._id)
+        .slice(0, 6);
+    });
+    return map;
+  }, [catalogs, items]);
 
   const handleScroll = (event: any) => {
     const y = event.nativeEvent.contentOffset.y;
     setIsSticky(y > 80); // khi cuộn xuống quá 80px thì stick header
   };
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="green" />
+        <Text>Loading data...</Text>
+      </View>
+    );
+  }
+
   return (
-    // Đây là trang for you, hiển thị các sản phẩm được đề xuất
-    <SafeAreaView className="flex-1" edges={["left", "right",]}>
+    <View className="flex-1">
       {/* Background */}
       <Image source={images.bg} className="absolute w-full h-full" />
-      {/* Header */}
-      <ImageBackground
-        source={isSticky ? images.bg : null} // hình khi sticky
-        className={`w-full ${isSticky ? "absolute top-0 left-0 right-0 z-10 pt-10" : "relative pt-20"
-          }`}
-        resizeMode="cover"
-      >
-        <Text
-          className={`uppercase font-extrabold px-4 ${isSticky ? "text-2xl text-center py-3" : "text-4xl"
+      {/* SafeAreaView Content */}
+      <SafeAreaView className="flex-1 px-4">
+        {/* Header */}
+        <ImageBackground
+          source={isSticky ? images.bg : null} // hình khi sticky
+          className={` ${isSticky
+            ? "absolute top-0 left-0 right-0 z-10 pt-10"
+            : "relative pt-16"
             }`}
+          resizeMode="cover"
         >
-          For You
-        </Text>
-      </ImageBackground>
+          <Text
+            className={`uppercase font-extrabold text-light ${isSticky ? "text-2xl text-center py-3" : "text-4xl"
+              }`}
+          >
+            For You
+          </Text>
+        </ImageBackground>
 
-      <ScrollView
-        className="px-4"
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 20, paddingTop: 60 }}
-      >
-        {/* Search Bar */}
-        <SearchBar />
-
-        {/* Product Sections */}
-        {items.length > 0 ? (
-          <FoUContainer
-            sectionTitle="Items from API"
-            route="/items"
-            items={items.slice(0, 4)} // Hiển thị 4 sản phẩm đầu tiên từ API
-          />
-        ) : (
-          seed.map((section) => (
-            <FoUContainer
-              key={section.route}
-              sectionTitle={section.sectionTitle}
-              route={section.route}
-              items={section.data.slice(0, 4)} // Fallback với dữ liệu seed
+        {/* ScrollView Content */}
+        <ScrollView
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 20, paddingTop: 50 }}
+        >
+          {/* Product Sections */}
+          {catalogs.map((catalog) => (
+            <ProductList
+              key={catalog._id}
+              catalogName={catalog.name}
+              href={catalog.name}
+              catalogId={catalog._id}
+              items={catalogItemsMap[catalog._id] || []}
             />
-          ))
-        )}
-      </ScrollView>
-    </SafeAreaView>
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
