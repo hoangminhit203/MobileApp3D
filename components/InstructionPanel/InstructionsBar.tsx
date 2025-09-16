@@ -44,10 +44,8 @@ const InstructionsBar = ({
                             currentStep > 0 && onStepChange(currentStep - 1)
                         }
                         disabled={currentStep === 0}
-                        // 🔽 Giảm padding nút: p-2 -> p-0.5
                         className="p-0.5"
                     >
-                        {/* 🔽 Giảm size icon: 32 -> 24 */}
                         <Ionicons
                             name="chevron-back-circle"
                             size={24}
@@ -58,10 +56,10 @@ const InstructionsBar = ({
                     {/* Nút Play / Pause */}
                     <TouchableOpacity
                         onPress={onPlayPause}
-                        // 🔽 Giảm padding nút: p-3 -> p-1
+
                         className="p-1 bg-purple-600 rounded-full"
                     >
-                        {/* 🔽 Giảm size icon: 28 -> 16 */}
+
                         <Ionicons
                             name={isPlaying ? "pause" : "play"}
                             size={16}
@@ -76,10 +74,10 @@ const InstructionsBar = ({
                             onStepChange(currentStep + 1)
                         }
                         disabled={currentStep === steps.length - 1}
-                        // 🔽 Giảm padding nút: p-2 -> p-0.5
+
                         className="p-0.5"
                     >
-                        {/* 🔽 Giảm size icon: 32 -> 24 */}
+
                         <Ionicons
                             name="chevron-forward-circle"
                             size={24}
@@ -93,7 +91,7 @@ const InstructionsBar = ({
                 </View>
             </View>
 
-            {/* 🔽 Giảm size chữ step counter: text-sm -> text-[10px] */}
+
             <Text className="text-right text-[10px] text-gray-500 mt-0.5">
                 {currentStep + 1}/{steps.length}
             </Text>
